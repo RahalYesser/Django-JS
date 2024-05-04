@@ -31,7 +31,7 @@ class Service(models.Model):
     file = models.FileField(upload_to='service_files')
     tarif = models.CharField(max_length=255)
     entrepreneur = models.ForeignKey(AutoEntrepreneur,on_delete=models.CASCADE)
-    client=models.ManyToManyField(Client,through='Demande',through_fields=('client','service'))
+    client=models.ManyToManyField(Client,through='Demande',through_fields=('service','client'))
     
 class Demande(models.Model):
     client=models.ForeignKey(Client,on_delete=models.CASCADE)
