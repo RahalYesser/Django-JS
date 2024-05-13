@@ -11,4 +11,8 @@ routes.register('demandes', DemandeViewSet)
 
 urlpatterns=[
     path('',include(routes.urls)),
+    path('login/',signIn),
+    path('clientsignup/',clientSignup),
+    path('entreproneursignup/',entreproneurSignup),
+    path('logout/',logout)
 ]

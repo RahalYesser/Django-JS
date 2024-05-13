@@ -1,25 +1,18 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-from django.db import models
 
-class User(models.Model):
-    nom = models.CharField(max_length=255)
-    email = models.CharField(max_length=255, unique=True)
-    password = models.CharField(max_length=255)
-    
-    class Meta:
-        abstract = True
-    
-    def __str__(self):
-        return self.nom
-
-class AutoEntrepreneur(User):
+class AutoEntrepreneur(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,default = '')
+    firstName = models.CharField(max_length=255,default = '')
+    lastName = models.CharField(max_length=255,default = '')
     description = models.TextField()
-    telephone = models.CharField(max_length=255)
+    tel = models.CharField(max_length=255)
     adresse = models.CharField(max_length=255)
     domaine = models.CharField(max_length=255)
     disponibilite = models.CharField(max_length=255)
-    note = models.CharField(max_length=255)
+    gender = models.CharField(max_length=10,default = '')
+    note = models.CharField(max_length=255,default = '')
     photo = models.FileField(upload_to='photos')
     
     class Meta:
@@ -28,21 +21,20 @@ class AutoEntrepreneur(User):
     def __str__(self):
         return self.nom
 
-class Client(User):
-    telephone = models.CharField(max_length=8)
+class Client(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,default = '')
+    firstName = models.CharField(max_length=255,default = '')
+    lastName = models.CharField(max_length=255,default = '')
+    tel = models.CharField(max_length=8)
     adresse = models.CharField(max_length=255)
-    photo = models.FileField(upload_to='photos')
-    
+    photo = models.FileField(upload_to='photos',default = '')
+    gender = models.CharField(max_length=10,default = '')
     class Meta:
         db_table = "client"
 
     def __str__(self):
         return self.nom
     
-class Admin(User):
-    class Meta:
-        db_table = "admin"
-
 class Service(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
