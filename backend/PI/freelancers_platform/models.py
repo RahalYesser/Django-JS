@@ -19,7 +19,7 @@ class AutoEntrepreneur(models.Model):
         db_table = "auto_entrepreneur"
 
     def __str__(self):
-        return self.nom
+        return self.firstName
 
 class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,default = '')
@@ -33,7 +33,7 @@ class Client(models.Model):
         db_table = "client"
 
     def __str__(self):
-        return self.nom
+        return self.firstName
     
 class Service(models.Model):
     title = models.CharField(max_length=255)
