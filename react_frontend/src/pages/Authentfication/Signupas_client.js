@@ -1,13 +1,69 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Topbar from '../../components/Topbar'
+import axios from 'axios'
+import { useNavigate  } from 'react-router-dom';
+
 
 const Signupas_client = () => {
+
+    const [formData, setFormData] = useState({
+        first_name: '',
+        last_name: '',
+        tel: '',
+        adresse: '',
+        email: '',
+        password: '',
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // Combine first name and last name to create username
+        const username = `${formData.first_name}${formData.last_name}`.toLowerCase();
+
+        // Create a new object to send to the backend
+        const dataToSubmit = {
+            user: {
+                username,
+                email: formData.email,
+                password: formData.password,
+            },
+            firstName: formData.first_name,
+            lastName: formData.last_name,
+            tel: formData.tel, 
+            adresse: formData.adresse        
+        };
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/clientsignup/', dataToSubmit);
+            console.log('Response:', response.data);
+            // Handle success (e.g., redirect to a new page, show a success message, etc.)
+            // Assuming the token is returned in the response
+            const token = response.data.token;
+            // Store token in local storage
+            localStorage.setItem('token', token);
+            // Redirect to profile page
+            navigate('/profil');
+            console.log("here");
+
+        } catch (error) {
+            console.error('There was an error!', error.response.data);
+            // Handle error (e.g., show error messages)
+        }
+    };
   return (
     <>
         <Topbar/>
         <section class="">   
         <div class="container pt-120 pb-6">
-            <form class="row justify-center " id="contact-form" action="" method="POST">
+            <form class="row justify-center " id="contact-form" >
                 <div class="w-full lg:w-6/12 bg-gray rounded-xl border border-solid border-opacity-10 border-body-color">
                     <div class="w-full pt-4">
                         <div class="section_title text-center pb-3">
@@ -18,14 +74,14 @@ const Signupas_client = () => {
                     <div class="w-full md:w-1/2">
                         <div class="mx-4">
                             <div class="single_form mt-5">
-                                <input name="first_name" id="first_name" type="text" placeholder="First Name" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"/>
+                                <input value={formData.first_name} onChange={handleChange} required name="first_name" id="first_name" type="text" placeholder="First Name" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"/>
                             </div> 
                         </div>                    
                     </div>
                     <div class="w-full md:w-1/2">
                         <div class="mx-4">
                             <div class="single_form mt-5">
-                                <input name="last_name" id="last_name" type="text" placeholder="Last Name" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"/>
+                                <input value={formData.last_name} onChange={handleChange} required name="last_name" id="last_name" type="text" placeholder="Last Name" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"/>
                             </div> 
                         </div>
                     </div>
@@ -33,7 +89,7 @@ const Signupas_client = () => {
                     <div class="w-full">
                         <div class="mx-4">
                             <div class="single_form mt-5">
-                                <input name="telephone" id="telephone" type="tel" placeholder="Telephone" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"/>
+                                <input value={formData.tel} onChange={handleChange} required name="tel" id="telephone" type="tel" placeholder="Telephone" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"/>
                             </div> 
                         </div>
                     </div>
@@ -41,11 +97,11 @@ const Signupas_client = () => {
                     <div class="w-full md:w-1/2">
                         <div class="mx-4">
                             <div class="single_form mt-5">
-                                <select name="address_region" id="address_region" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color">
-                                    <option value="" disabled selected>Region</option>
-                                    <option value="region1">Bizerte</option>
-                                    <option value="region2">Tunis</option>
-                                    <option value="region3">Ariana</option>
+                                <select value={formData.adresse} onChange={handleChange} required name="adresse" id="address_region" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color">
+                                    <option value="" >Region</option>
+                                    <option value="Bizerte">Bizerte</option>
+                                    <option value="Tunis">Tunis</option>
+                                    <option value="Ariana">Ariana</option>
                                     
                                 </select>
                             </div> 
@@ -84,21 +140,21 @@ const Signupas_client = () => {
                     <div class="w-full">
                         <div class="mx-4">
                             <div class="single_form mt-5">
-                                <input name="email" id="email" type="email" placeholder="Email" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"/>
+                                <input value={formData.email} onChange={handleChange} required name="email" id="email" type="email" placeholder="Email" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"/>
                             </div> 
                         </div>
                     </div>
                     <div class="w-full">
                         <div class="mx-4">
                             <div class="single_form mt-5">
-                                <input name="password" id="password" type="password" placeholder="Password" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"/>
+                                <input value={formData.password} onChange={handleChange} required name="password" id="password" type="password" placeholder="Password" class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"/>
                             </div> 
                         </div>
                     </div>
                     <div class="w-full">
                         <div class="mx-4">
                             <div class="single_form mt-5">
-                                <input type="checkbox" id="terms" name="terms" value="agreed"/>
+                                <input required type="checkbox" id="terms" name="terms" value="agreed"/>
                                 <label for="terms"> Yes, I understand and agree to the WorkWave Terms of Service, including the User Agreement and Privacy Policy.</label>
                             </div> 
                         </div>
@@ -106,7 +162,7 @@ const Signupas_client = () => {
                     <div class="w-full row justify-center">
                         <div class="mx-4">
                             <div class="single_form mt-5">
-                                <button type="submit" class="form-btn">Sign up</button>
+                                <button onClick={handleSubmit} class="form-btn">Sign up</button>
                             </div> 
                         </div>
                     </div>

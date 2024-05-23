@@ -1,12 +1,31 @@
 import React, { useState, useEffect }from 'react'
 import logo1 from '../assets/images/WorkWave.png'
+import { useNavigate  } from 'react-router-dom';
+import axios from 'axios'
 
 const Topbar_profil = () => {
     const [isOpen, setIsOpen] = useState(false);
-
+    const navigate = useNavigate();
     const toggleMenu = () => {
       setIsOpen(!isOpen);
     };
+    const handleLogout = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          console.log(token);
+          await axios.get('http://127.0.0.1:8000/logout/', {
+            headers: {
+                Authorization: `Token ${token}`,
+            },
+            }).then((response) => {
+                console.log(response.data);
+            });
+          localStorage.removeItem('token');
+          navigate('/');
+        } catch (error) {
+          console.error('Logout failed:', error);
+        }
+      };
 
   return (
     <>
@@ -40,7 +59,14 @@ const Topbar_profil = () => {
                                     </li> */}
                                     <li class="nav-item ml-5 lg:ml-11">
                                         <a class="page-scroll" href="#contact">Contact</a>
+
                                     </li>
+                                    <li class="nav-item ml-5 lg:ml-11">
+                                        <button onClick={handleLogout}>Logout</button>
+
+                                    </li>
+
+                                    
                                     {/* <!-- Profile dropdown --> */}
                                     <div className="nav-item ml-8">
                                     <div>
@@ -99,6 +125,7 @@ const Topbar_profil = () => {
                                             role="menuitem"
                                             tabIndex="-1"
                                             id="user-menu-item-2"
+                                            onClick={handleLogout}
                                         >
                                             Sign out
                                         </a>

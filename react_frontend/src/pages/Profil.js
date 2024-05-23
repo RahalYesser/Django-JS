@@ -4,8 +4,10 @@ import '../App.css'
 import Topbar_profil from '../components/Topbar_profil';
 import Footer from '../components/Home/Footer';
 
+
 const Profil = () => {
-    const [isOpen, setIsOpen] = useState(false);
+   
+    /* const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -21,7 +23,7 @@ const Profil = () => {
            .catch((err) => {
               console.log(err.message);
            });
-      }, []);
+      }, []); */
     return (
      <>
 
@@ -39,13 +41,13 @@ const Profil = () => {
        
 
             <Topbar_profil/>
-            <ul>
+            {/* <ul>
                 {client.map(cl => (
                 <li key={cl.id}>
                     {cl.firstName} 
                 </li>
                 ))}
-            </ul>
+            </ul> */}
 
             <div class="bg-gray-100 pt-18">
                 <div class="container mx-auto py-12">

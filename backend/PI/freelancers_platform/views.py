@@ -9,6 +9,7 @@ from django.contrib.auth.models import Group
 from rest_framework.decorators import api_view,permission_classes, authentication_classes
 from rest_framework import status
 from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
 from django.contrib.auth import authenticate
 
 class AutoEntrepreneurViewSet(viewsets.ModelViewSet):
@@ -95,5 +96,17 @@ def signIn(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def logout(request):
-    request.user.auth_token.delete()
-    return Response({"message":"Logged out successfully"})
+    try:
+        if request.user.is_authenticated:
+        # Delete the authentication token associated with the current user
+            request.user.auth_token.delete()
+            return Response({"message": "Logged out successfully"})
+    except AuthenticationFailed:
+        # If authentication fails, return an error response
+        return Response({"error": "Authentication failed"}, status=status.HTTP_401_UNAUTHORIZED)
+    except PermissionDenied:
+        # If the user doesn't have permission to perform this action, return an error response
+        return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+    except Exception as e:
+        # For any other unexpected errors, return a generic error response
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

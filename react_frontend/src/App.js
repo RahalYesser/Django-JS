@@ -12,6 +12,7 @@ import Login from './pages/Authentfication/Login';
 import Signupas_client from './pages/Authentfication/Signupas_client';
 import Signupas_self_employed from './pages/Authentfication/Signupas_self_employed';
 import Profil from './pages/Profil';
+import PrivateRoute from './components/PrivateRoute'
 
 function App() {
   return (
@@ -24,7 +25,14 @@ function App() {
           <Route path='/signupas/client' element={<Signupas_client/>}></Route>
           <Route path='/signupas/self-employed' element={<Signupas_self_employed/>}></Route>
           <Route path='/login' element={<Login/>}></Route>
-          <Route path='/profil' element={<Profil/>}></Route>
+          <Route element={<PrivateRoute/>}>
+            <Route path='/profil' element={<Profil/>}></Route>
+          </Route>
+          {/* <PrivateRoute path="/profil" element={<Profil />} /> */}
+          {/* <PrivateRoute path="/profil">
+            <Profil />
+          </PrivateRoute> */}
+                  
          </Route>   
        </Routes>
      </BrowserRouter>
