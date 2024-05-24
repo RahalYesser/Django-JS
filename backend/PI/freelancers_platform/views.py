@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets
 from .serializers import *
@@ -11,7 +13,9 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
 from django.contrib.auth import authenticate
-
+from django.core.mail import send_mail
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 class AutoEntrepreneurViewSet(viewsets.ModelViewSet):
     queryset = AutoEntrepreneur.objects.all()
     serializer_class = AutoEntrepreneurSerializer
@@ -50,7 +54,7 @@ def clientSignup(request):
 
 @api_view(['POST'])
 def entreproneurSignup(request):
-    serializer = AutoEntrepreneurSerializer(data=request.data)
+    serializer = EntreproneurSignUpSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         username = request.data.get('user', {}).get('username')
@@ -98,15 +102,73 @@ def signIn(request):
 def logout(request):
     try:
         if request.user.is_authenticated:
-        # Delete the authentication token associated with the current user
             request.user.auth_token.delete()
             return Response({"message": "Logged out successfully"})
     except AuthenticationFailed:
-        # If authentication fails, return an error response
         return Response({"error": "Authentication failed"}, status=status.HTTP_401_UNAUTHORIZED)
     except PermissionDenied:
-        # If the user doesn't have permission to perform this action, return an error response
         return Response({"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
     except Exception as e:
-        # For any other unexpected errors, return a generic error response
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@csrf_exempt
+def send_email_view(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        
+        subject = data.get('subject', 'No Subject')
+        message = data.get('message', '')
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = data.get('recipient_list', [])
+        
+        if not recipient_list:
+            return JsonResponse({'error': 'Recipient list is empty'}, status=400)
+
+        try:
+            send_mail(subject, message, from_email, recipient_list)
+            return JsonResponse({'success': 'Email sent successfully'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405) 
+
+@api_view(['GET'])
+def get_current_user(request):
+    user = request.user
+    
+    if user.is_authenticated:
+        if hasattr(user, 'autoentrepreneur'):
+            auto_entrepreneur = user.autoentrepreneur
+            data = {
+                'user_type': 'auto_entrepreneur',
+                'id': auto_entrepreneur.id,
+                'firstName': auto_entrepreneur.firstName,
+                'lastName': auto_entrepreneur.lastName,
+                'description': auto_entrepreneur.description,
+                'tel': auto_entrepreneur.tel,
+                'adresse': auto_entrepreneur.adresse,
+                'domaine': auto_entrepreneur.domaine,
+                'disponibilite': auto_entrepreneur.disponibilite,
+                'gender': auto_entrepreneur.gender,
+                'note': auto_entrepreneur.note,
+                'photo': auto_entrepreneur.photo.url if auto_entrepreneur.photo else None,
+                'valid': auto_entrepreneur.valid,
+            }
+        elif hasattr(user, 'client'):
+            client = user.client
+            data = {
+                'user_type': 'client',
+                'id': client.id,
+                'firstName': client.firstName,
+                'lastName': client.lastName,
+                'tel': client.tel,
+                'adresse': client.adresse,
+                'photo': client.photo.url if client.photo else None,
+                'gender': client.gender,
+            }
+        else:
+            return JsonResponse({'error': 'Unexpected user type'}, status=400)
+        
+        return JsonResponse(data)
+    else:
+        return JsonResponse({'error': 'User is not authenticated'}, status=401)

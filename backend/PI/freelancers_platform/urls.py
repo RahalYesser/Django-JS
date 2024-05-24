@@ -14,5 +14,7 @@ urlpatterns=[
     path('login/',signIn),
     path('clientsignup/',clientSignup),
     path('entreproneursignup/',entreproneurSignup),
-    path('logout/',logout)
+    path('logout/',logout),
+    path('send-email/', send_email_view),
+    path('get_current_user/', get_current_user),
 ]
