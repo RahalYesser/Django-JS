@@ -16,6 +16,7 @@ from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+
 class AutoEntrepreneurViewSet(viewsets.ModelViewSet):
     queryset = AutoEntrepreneur.objects.all()
     serializer_class = AutoEntrepreneurSerializer
@@ -132,10 +133,13 @@ def send_email_view(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405) 
 
+
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def get_current_user(request):
+    print(request.user)
     user = request.user
-    
     if user.is_authenticated:
         if hasattr(user, 'autoentrepreneur'):
             auto_entrepreneur = user.autoentrepreneur

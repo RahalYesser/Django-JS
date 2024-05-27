@@ -29,7 +29,7 @@ const Login = () => {
             });
             console.log('Response:', response.data);
             localStorage.setItem('token', response.data.token); // Store the token in localStorage
-            navigate('/profil'); // Redirect to the profil
+            navigate(`/${formData.username}/profil`); // Redirect to the profil
         } catch (error) {
             console.error('There was an error!', error.response.data);
             setError(error.response.error);
@@ -38,25 +38,26 @@ const Login = () => {
   return (
     <>
         <Topbar/>
-        <section class="">     
-        <div class="container pt-120 pb-6">
-            <form class="row justify-center " onSubmit={handleSubmit} id="contact-form">
-                <div class="w-full lg:w-4/12 bg-gray rounded-xl border border-solid border-opacity-10 border-body-color">
-                    <div class="w-full pt-4">
-                        <div class="section_title text-center pb-3">
-                            <h5 class="sub_title">Login to WorkWave</h5>
-                        {/* <h4 class="main_title">Work Process</h4> */}
+        <section className=""> 
+            
+        <div className="container pt-120 pb-6">
+            <form className="row justify-center " onSubmit={handleSubmit} id="contact-form">
+                <div className="w-full lg:w-4/12 bg-gray rounded-xl border border-solid border-opacity-10 border-body-color">
+                    <div className="w-full pt-4">
+                        <div className="section_title text-center pb-3">
+                            <h5 className="sub_title">Login to WorkWave</h5>
+                        {/* <h4 className="main_title">Work Process</h4> */}
                         </div> 
                     </div>
-                    <div class="w-full">
-                        <div class="mx-4">
-                            <div class="single_form mt-5">
+                    <div className="w-full">
+                        <div className="mx-4">
+                            <div className="single_form mt-5">
                                 <input height="12" 
                                 name="username" 
                                 id="email" 
                                 type="text" 
                                 placeholder="Username" 
-                                class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"
+                                className="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
@@ -64,14 +65,14 @@ const Login = () => {
                             </div> 
                         </div>
                     </div>
-                    <div class="w-full">
-                        <div class="mx-4">
-                            <div class="single_form mt-5">
+                    <div className="w-full">
+                        <div className="mx-4">
+                            <div className="single_form mt-5">
                                 <input name="password" 
                                 id="password" 
                                 type="password" 
                                 placeholder="Password" 
-                                class="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"
+                                className="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
@@ -80,30 +81,30 @@ const Login = () => {
                         </div>
                     </div>
 
-                    {error && <p className="form-message mx-5 mt-4" style={{ color: 'red' }}>{error}</p>}
+                    {error && <p classNameName="form-message mx-5 mt-4" style={{ color: 'red' }}>{error}</p>}
 
-                    <p class="form-message mx-5 mt-4">Forget password ?</p>
+                    <p className="form-message mx-5 mt-4">Forget password ?</p>
                 
-                    <div class="w-full row justify-center">
-                        <div class="mx-4">
-                            <div class="single_form mt-5">
-                                <button type="submit" class="form-btn">Login</button>
+                    <div className="w-full row justify-center">
+                        <div className="mx-4">
+                            <div className="single_form mt-5">
+                                <button type="submit" className="form-btn">Login</button>
                             </div> 
                         </div>
                     </div>
 
-                    <div class="w-full row justify-center ">
-                        <div class="mx-4">
-                            <div class="single_form mt-5">
+                    <div className="w-full row justify-center ">
+                        <div className="mx-4">
+                            <div className="single_form mt-5">
                                 <p>Don't have a WorkWave account ?</p>
                             </div> 
                         </div>
                     </div>
 
-                    <div class="w-full row justify-center pb-3">
-                        <div class="mx-4">
-                            <div class="single_form mt-5">
-                                <button type="submit" class="form-btn">Sign up</button>
+                    <div className="w-full row justify-center pb-3">
+                        <div className="mx-4">
+                            <div className="single_form mt-5">
+                                <button type="submit" className="form-btn">Sign up</button>
                             </div> 
                         </div>
                     </div>

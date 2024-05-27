@@ -1,58 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import Topbar from '../components/Topbar';
-import '../App.css'
-import Topbar_profil from '../components/Topbar_profil';
-import Footer from '../components/Home/Footer';
-import { Link, useParams } from 'react-router-dom'
-import axios from 'axios';
+import React from 'react'
 
-
-
-const Profil = () => {
-
-  const [user, setUser] = useState(false);
-  const { username } = useParams();
-
-  useEffect(() => {
-    try {
-          const token = localStorage.getItem('token');
-          console.log(token);
-          axios.get('http://127.0.0.1:8000/get_current_user/', {
-            headers: {
-                Authorization: `Token ${token}`,
-            },
-            }).then((response) => {
-                console.log(response.data);
-                setUser(response.data)
-            });
-        
-        } catch (error) {
-          console.error(error.message);
-        }
- 
-  }, [username]);
-   
-
-    /* const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-    const [client, setClient] = useState([]);
-    useEffect(() => {
-        fetch('http://127.0.0.1:8000/client/')
-           .then((response) => response.json())
-           .then((data) => {
-              console.log(data);
-              setClient(data);
-           })
-           .catch((err) => {
-              console.log(err.message);
-           });
-      }, []); */
-    return (
-     <>
-            <Topbar_profil/>
+const ClientProfil = () => {
+  return (
+    <>
+     <Topbar_profil/>
            {/*  <ul>
                 {client.map(cl => (
                 <li key={cl.id}>
@@ -150,47 +101,7 @@ const Profil = () => {
                                 <h2 className="text-xl font-bold mt-6 mb-4">Experience</h2>
                                 <div className="mb-6">
 
-                                <section className="services_area" id="about">
-        <div className="container">
-            
-            <div className="row">
-                <div className="w-full sm:w-10/12 md:w-6/12 lg:w-4/12">
-                    <Link to="client">                   
-                    <div className="single_services text-center mt-8 mx-3">
-                        <div className="services_icon">
-                            <i className="lni lni-circle-plus"></i>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="94" height="92" viewBox="0 0 94 92">
-                                <path className="services_shape" id="Polygon_12" data-name="Polygon 12" d="M42.212,2.315a11,11,0,0,1,9.576,0l28.138,13.6a11,11,0,0,1,5.938,7.465L92.83,54.018A11,11,0,0,1,90.717,63.3L71.22,87.842A11,11,0,0,1,62.607,92H31.393a11,11,0,0,1-8.613-4.158L3.283,63.3A11,11,0,0,1,1.17,54.018L8.136,23.383a11,11,0,0,1,5.938-7.465Z" />
-                            </svg>
-        
-                        </div>
-                        <div className="services_content mt-5">
-                            <h3 className="services_title text-black font-semibold text-xl md:text-3xl">Add service</h3>
-                            {/* <p className="mt-4">I'm a client, hiring for a pro for job</p> */}
-                        </div>
-                    </div> 
-                    </Link>
-                </div>
-
-                <div className="w-full sm:w-10/12 md:w-6/12 lg:w-4/12">
-                    <Link to="self-employed">
-                    <div className="single_services text-center mt-8 mx-3">
-                        <div className="services_icon">
-                            <i className="lni lni-briefcase"></i>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="94" height="92" viewBox="0 0 94 92">
-                                <path className="services_shape" id="Polygon_12" data-name="Polygon 12" d="M42.212,2.315a11,11,0,0,1,9.576,0l28.138,13.6a11,11,0,0,1,5.938,7.465L92.83,54.018A11,11,0,0,1,90.717,63.3L71.22,87.842A11,11,0,0,1,62.607,92H31.393a11,11,0,0,1-8.613-4.158L3.283,63.3A11,11,0,0,1,1.17,54.018L8.136,23.383a11,11,0,0,1,5.938-7.465Z" />
-                            </svg>
-                        </div>
-                        <div className="services_content mt-5">
-                            <h3 className="services_title text-black font-semibold text-xl md:text-3xl">Self-employed</h3>
-                            <p className="mt-4">I'm a self-employed, looking for work</p>
-                        </div>
-                    </div> 
-                    </Link>
-                </div>
-            </div> 
-        </div> 
-    </section>
+                                
                                     <div className="flex justify-between flex-wrap gap-2 w-full">
                                         <span className="text-gray-700 font-bold">Web Developer</span>
                                         <p>
@@ -239,9 +150,9 @@ const Profil = () => {
             </div>
             
             <Footer/>
+    
     </>
- 
   )
 }
 
-export default Profil
+export default ClientProfil
