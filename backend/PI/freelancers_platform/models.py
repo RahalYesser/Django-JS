@@ -49,7 +49,17 @@ class Service(models.Model):
 
     def __str__(self):
         return self.title
+    
+class ServiceFile(models.Model):
+    service = models.ForeignKey(Service, related_name='files', on_delete=models.CASCADE)
+    file = models.FileField(upload_to='service_files/')
 
+    class Meta:
+        db_table = "service_file"
+
+    def __str__(self):
+        return self.file.name
+    
 class Demande(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE,default = '')
     service = models.ForeignKey(Service, on_delete=models.CASCADE)

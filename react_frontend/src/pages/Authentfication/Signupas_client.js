@@ -97,7 +97,7 @@ const Signupas_client = () => {
                     <div className="w-full md:w-1/2">
                         <div className="mx-4">
                             <div className="single_form mt-5">
-                                <select value={formData.adresse} onChange={handleChange} required name="adresse" id="address_region" className="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color">
+                                <select value={formData.adresse} onChange={handleChange} required name="adresse" id="address_region" className="w-full select-1 rounded-md px-6 border border-solid border-body-color">
                                     <option value="" >Region</option>
                                     <option value="Bizerte">Bizerte</option>
                                     <option value="Tunis">Tunis</option>
@@ -110,7 +110,7 @@ const Signupas_client = () => {
                     <div className="w-full md:w-1/2">
                         <div className="mx-4">
                             <div className="single_form mt-5">
-                                <select name="address_city" id="address_city" className="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color">
+                                <select name="address_city" id="address_city" className="w-full select-1 rounded-md px-6 border border-solid border-body-color">
                                     <option value="" disabled selected>City</option>
                                     <option value="city1">EL ALIA</option>
                                     <option value="city2">City 2</option>

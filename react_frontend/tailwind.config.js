@@ -5,7 +5,8 @@ module.exports = {
     content: [
       "./src/**/*.{js,jsx,ts,tsx}",
       '*.html',
-      './src/assets/js/main.js'
+      './src/assets/js/main.js',
+      'node_modules/flowbite-react/lib/esm/**/*.js'
     ]
   },
   theme: {
@@ -98,6 +99,6 @@ module.exports = {
     },
    
   },
-  plugins: [],
+  plugins: [require('flowbite/plugin')],
 }
 

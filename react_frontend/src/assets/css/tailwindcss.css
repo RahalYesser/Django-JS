@@ -186,7 +186,14 @@ textarea {
   font-family: inherit; /* 1 */
   font-size: 100%; /* 1 */
   line-height: 1.15; /* 1 */
-  margin: 0; /* 2 */
+  margin: 0;
+  color: black;
+}
+
+.select-1{
+  color: black;
+  line-height: 1.15;
+  height: 3rem;
 }
 
 .input-1 {
@@ -194,6 +201,8 @@ textarea {
   font-size: 100%; /* 1 */
   line-height: 1; /* 1 */
   margin: 0; /* 2 */
+  color: black;
+  height: 3rem;
 }
 
 /**
@@ -524,8 +533,8 @@ video {
 
 .container{
   width: 100%;
-  margin-right: auto;
-  margin-left: auto;
+/*   margin-right: auto;
+  margin-left: auto; */
 }
 
 @media (min-width: 540px){
@@ -1691,6 +1700,29 @@ a, button {
   padding-right: 24px;
   padding-top: 52px;
   padding-bottom: 52px;
+}
+
+.images-1 {
+  --tw-border-opacity: 1;
+  border-color: rgba(232, 232, 232, var(--tw-border-opacity));
+}
+
+.images-1:hover{
+  --tw-border-opacity: 1;
+  border-color: rgba(249, 79, 79, var(--tw-border-opacity));
+}
+
+.images-1{
+  border-radius: 0.75rem;
+  border-style: dashed;
+  border-width: 2px;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+.images-1:hover{
+  --tw-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 .single_services:hover{
@@ -18419,6 +18451,12 @@ a, button {
 .more_btn:hover{
   --tw-text-opacity: 1;
   color: rgba(249, 79, 79, var(--tw-text-opacity));
+}
+
+.error {
+  color: red;
+  font-size: 0.875em;
+  margin-top: 0.25em;
 }
 
 /* ========== contact ========= */

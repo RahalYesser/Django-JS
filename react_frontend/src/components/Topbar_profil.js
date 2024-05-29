@@ -60,13 +60,7 @@ const Topbar_profil = () => {
                                     <li className="nav-item ml-5 lg:ml-11">
                                         <a className="page-scroll" href="#contact">Contact</a>
 
-                                    </li>
-                                    <li className="nav-item ml-5 lg:ml-11">
-                                        <button onClick={handleLogout}>Logout</button>
-
-                                    </li>
-
-                                    
+                                    </li>                            
                                     {/* <!-- Profile dropdown --> */}
                                     <div className="nav-item ml-8">
                                     <div>
