@@ -26,7 +26,7 @@ function App() {
           <Route path='/signupas/self-employed' element={<Signupas_self_employed/>}></Route>
           <Route path='/login' element={<Login/>}></Route>
           <Route element={<PrivateRoute/>}>
-            <Route path='/:username/profil' element={<Profil/>}></Route>
+            <Route path='/:username/profile' element={<Profil/>}></Route>
           </Route>
           {/* <PrivateRoute path="/profil" element={<Profil />} /> */}
           {/* <PrivateRoute path="/profil">

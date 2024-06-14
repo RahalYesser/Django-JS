@@ -26,10 +26,7 @@ const Signupas_client = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Combine first name and last name to create username
         const username = `${formData.first_name}${formData.last_name}`.toLowerCase();
-
-        // Create a new object to send to the backend
         const dataToSubmit = {
             user: {
                 username,
@@ -50,7 +47,7 @@ const Signupas_client = () => {
             // Store token in local storage
             localStorage.setItem('token', token);
             // Redirect to profile page
-            navigate(`/${username}/profil`);
+            navigate(`/${username}/profile`);
             console.log("here");
 
         } catch (error) {

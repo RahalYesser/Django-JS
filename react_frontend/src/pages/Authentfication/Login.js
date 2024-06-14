@@ -27,9 +27,8 @@ const Login = () => {
                 username: formData.username, 
                 password: formData.password
             });
-            console.log('Response:', response.data);
             localStorage.setItem('token', response.data.token); // Store the token in localStorage
-            navigate(`/${formData.username}/profil`); // Redirect to the profil
+            navigate(`/${formData.username}/profile`); // Redirect to the profil
         } catch (error) {
             console.error('There was an error!', error.response.data);
             setError(error.response.error);
@@ -38,8 +37,7 @@ const Login = () => {
   return (
     <>
         <Topbar/>
-        <section className=""> 
-            
+        <section className="">           
         <div className="container pt-120 pb-6">
             <form className="row justify-center " onSubmit={handleSubmit} id="contact-form">
                 <div className="w-full lg:w-4/12 bg-gray rounded-xl border border-solid border-opacity-10 border-body-color">

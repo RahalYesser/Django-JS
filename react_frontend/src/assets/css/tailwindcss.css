@@ -481,7 +481,7 @@ select,
 textarea {
   padding: 0;
   line-height: inherit;
-  color: inherit;
+  color: black;
 }
 
 /**
@@ -1170,6 +1170,11 @@ a, button {
   padding-right: 16px;
 }
 
+.profile {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -1228,7 +1233,7 @@ a, button {
 .form-btn{
   border-radius: 9999px;
   cursor: pointer;
-  display: inline-block;
+  display: inline-flex;
   font-weight: 500;
   font-size: 1rem;
   line-height: 1rem;
@@ -1716,8 +1721,6 @@ a, button {
   border-radius: 0.75rem;
   border-style: dashed;
   border-width: 2px;
-  padding-left: 32px;
-  padding-right: 32px;
 }
 
 .images-1:hover{
@@ -10150,7 +10153,7 @@ a, button {
   border-radius: 9999px;
   border-style: solid;
   border-width: 2px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 36px;
@@ -10162,6 +10165,8 @@ a, button {
 .single_team:hover .social li {
   opacity: 1;
   visibility: visible;
+  display: inline;
+  padding: 4px;
   --tw-translate-x: 0px;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);

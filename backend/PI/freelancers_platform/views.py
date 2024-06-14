@@ -16,6 +16,7 @@ from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.hashers import make_password
 
 class AutoEntrepreneurViewSet(viewsets.ModelViewSet):
     queryset = AutoEntrepreneur.objects.all()
@@ -130,24 +131,28 @@ def send_email_view(request):
             return JsonResponse({'success': 'Email sent successfully'})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-
     return JsonResponse({'error': 'Invalid request method'}, status=405) 
 
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def get_current_user(request):
-    print(request.user)
+def get_current_user(request):  
+    #username = data.get('username')
+    #plain_text_password = data.get('password')
     user = request.user
+    #hashed_pwd = make_password(user.email)
+    print(user.email)
     if user.is_authenticated:
         if hasattr(user, 'autoentrepreneur'):
             auto_entrepreneur = user.autoentrepreneur
             data = {
                 'user_type': 'auto_entrepreneur',
                 'id': auto_entrepreneur.id,
+                'username':user.username,
                 'firstName': auto_entrepreneur.firstName,
                 'lastName': auto_entrepreneur.lastName,
+                'email':user.email,
                 'description': auto_entrepreneur.description,
                 'tel': auto_entrepreneur.tel,
                 'adresse': auto_entrepreneur.adresse,
@@ -163,10 +168,12 @@ def get_current_user(request):
             data = {
                 'user_type': 'client',
                 'id': client.id,
+                'username':user.username,
                 'firstName': client.firstName,
                 'lastName': client.lastName,
                 'tel': client.tel,
                 'adresse': client.adresse,
+                'email':user.email,
                 'photo': client.photo.url if client.photo else None,
                 'gender': client.gender,
             }

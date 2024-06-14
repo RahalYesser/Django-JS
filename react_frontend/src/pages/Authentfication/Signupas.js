@@ -12,7 +12,6 @@ const Signupas = () => {
                 <div className="w-full lg:w-1/2">
                     <div className="section_title text-center pb-3">
                         <h5 className="sub_title">Join as a client or a self-employed </h5>
-                        {/* <h4 className="main_title">Work Process</h4> */}
                     </div> 
                 </div>
             </div> 

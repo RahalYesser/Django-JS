@@ -1,24 +1,30 @@
 import React, { useState, useEffect }from 'react'
 import logo1 from '../assets/images/WorkWave.png'
+import IMG from '../assets/images/utilisateur.png';
 import { useNavigate  } from 'react-router-dom';
 import axios from 'axios'
 
-const Topbar_profil = () => {
+const Topbar_profil = ({ user }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [userIMG, setUserIMG] = useState(IMG);
     const navigate = useNavigate();
+
+    if (user.photo) {
+        setUserIMG(user.photo);
+    }
+
     const toggleMenu = () => {
       setIsOpen(!isOpen);
     };
     const handleLogout = async () => {
         try {
           const token = localStorage.getItem('token');
-          console.log(token);
           await axios.get('http://127.0.0.1:8000/logout/', {
             headers: {
                 Authorization: `Token ${token}`,
             },
             }).then((response) => {
-                console.log(response.data);
+                //console.log(response.data);
             });
           localStorage.removeItem('token');
           navigate('/');
@@ -27,6 +33,24 @@ const Topbar_profil = () => {
         }
       };
 
+      const handleClickOutside = (event) => {
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        if (dropdownMenu && !dropdownMenu.contains(event.target) && !event.target.closest('#user-menu-button')) {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        if (isOpen) {
+            document.addEventListener('click', handleClickOutside);
+        } else {
+            document.removeEventListener('click', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [isOpen]);
+    
   return (
     <>
     <div className="navbar-area bg-gray shadow">
@@ -48,15 +72,6 @@ const Topbar_profil = () => {
                                     <li className="nav-item ml-5 lg:ml-11">
                                         <a className="page-scroll" href="#services">Services</a>
                                     </li>
-                                  {/*   <li className="nav-item ml-5 lg:ml-11">
-                                        <a className="page-scroll" href="#work">Projects</a>
-                                    </li>
-                                    <li className="nav-item ml-5 lg:ml-11">
-                                        <a className="page-scroll" href="#pricing">Pricing</a>
-                                    </li>
-                                    <li className="nav-item ml-5 lg:ml-11">
-                                        <a className="page-scroll" href="#blog">Blog</a>
-                                    </li> */}
                                     <li className="nav-item ml-5 lg:ml-11">
                                         <a className="page-scroll" href="#contact">Contact</a>
 
@@ -76,14 +91,14 @@ const Topbar_profil = () => {
                                         <span className="sr-only">Open user menu</span>
                                         <img
                                             className="h-8 w-8 rounded-full"
-                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                            alt=""
+                                            src={userIMG}
                                         />
                                         </button>
                                     </div>
 
                                     {isOpen && (
                                         <div
+                                        id="dropdown-menu"
                                         className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                         role="menu"
                                         aria-orientation="vertical"
@@ -102,7 +117,7 @@ const Topbar_profil = () => {
                                         </a>
                                         </li>
                                         <li className="nav-item mx-3">
-                                        <a
+                                       {/*  <a
                                             href="#"
                                             className="block px-4 py-2 text-sm text-gray-700"
                                             role="menuitem"
@@ -110,7 +125,7 @@ const Topbar_profil = () => {
                                             id="user-menu-item-1"
                                         >
                                             Settings
-                                        </a>
+                                        </a> */}
                                         </li>
                                         <li className="nav-item mx-3 mb-2">
                                         <a

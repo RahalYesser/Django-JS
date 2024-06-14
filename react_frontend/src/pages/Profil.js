@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Topbar from "../components/Topbar";
 import "../App.css";
 import Topbar_profil from "../components/Topbar_profil";
 import Footer from "../components/Home/Footer";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import AddServiceModal from "../components/Modals/AddServiceModal";
-import { Carousel, Badge } from "flowbite-react";
 import AllServices from "../components/Services/AllServices";
+import userIMG from "../assets/images/utilisateur.png"
+import { FaPen } from "react-icons/fa";
+import EditProfilModal from "../components/Modals/EditProfilModal";
 
 const Profil = () => {
   const [user, setUser] = useState(false);
@@ -40,79 +40,55 @@ const Profil = () => {
     fetchCurrenUser();
   }, [username]);
 
-  /* const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-    const [client, setClient] = useState([]);
-    useEffect(() => {
-        fetch('http://127.0.0.1:8000/client/')
-           .then((response) => response.json())
-           .then((data) => {
-              console.log(data);
-              setClient(data);
-           })
-           .catch((err) => {
-              console.log(err.message);
-           });
-      }, []); */
   return (
     <>
-      <Topbar_profil />
-
-      {/*  <ul>
-                {client.map(cl => (
-                <li key={cl.id}>
-                    {cl.firstName} 
-                </li>
-                ))}
-            </ul> */}
+      <Topbar_profil user={user}/>
 
       <div className="bg-gray-100 pt-18">
-        <div className="container mx-auto py-12">
-          <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
-            <div className="col-span-4 sm:col-span-3">
+        <div className="profile mx-auto py-12">
+          <div className="grid lg:grid-cols-12 sm:grid-cols-12 gap-6 px-2">
+            <div className="lg:col-span-3 sm:col-span-full md:col-span-full">
               <div className="bg-gray shadow rounded-lg p-6">
                 <div className="flex flex-col items-center">
                   <img
-                    src="https://randomuser.me/api/portraits/men/94.jpg"
+                    src={userIMG}
                     className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
                   ></img>
                   <h1 className="text-xl font-bold">
                     {user.firstName} {user.lastName}
                   </h1>
-                  <p className="text-gray-700">{username}</p>
-                  <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                    <a href="#" className="form-btn">
-                      Contact
+                  <p className="text-gray-700">username: {username}</p>
+                  <div className="mt-6 flex flex-col gap-4 items-center">
+                    <a onClick={toggleModal} className="form-btn">
+                      <span className="pr-3">Edit</span> <FaPen/>
                     </a>
-                    <a
-                      href="#"
-                      className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"
-                    >
-                      Resume
-                    </a>
+                    <div className="uppercase justify-center">
+                      <p>{user.user_type}</p>
+                    </div>
+                    {isModalOpen && (
+                  <EditProfilModal
+                    user={user}
+                    username={username}
+                    onClose={toggleModal}
+                  />
+                )}
+        
                   </div>
                 </div>
                 <hr className="my-6 border-t border-gray-300" />
                 <div className="flex flex-col">
                   <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">
-                    Skills
+                    Phone
                   </span>
                   <ul>
-                    <li className="mb-2">JavaScript</li>
-                    <li className="mb-2">React</li>
-                    <li className="mb-2">Node.js</li>
-                    <li className="mb-2">HTML/CSS</li>
-                    <li className="mb-2">Tailwind Css</li>
+                    <li className="mb-2"><span className="p-1 bg-gray-200">+216</span> {user.tel}</li>
                   </ul>
                 </div>
               </div>
             </div>
-            <div className="col-span-4 sm:col-span-9">
+            <div className="lg:col-span-9 sm:col-span-full md:col-span-full">
               <div className="bg-gray shadow rounded-lg p-6">
-                <h2 className="text-xl font-bold mb-4">ABOUT ME</h2>
+                {/* <h2 className="text-xl font-bold mb-4">ABOUT ME</h2>
                 <p className="text-gray-700"></p>
 
                 <h3 className="font-semibold text-center mt-3 -mb-2">
@@ -204,52 +180,13 @@ const Profil = () => {
                       ></path>
                     </svg>
                   </a>
-                </div>
+                </div> */}
 
-                <h2 className="text-xl font-bold mt-6 mb-4">MY SERVICES</h2>
+                <h2 className="text-xl font-bold">MY SERVICES</h2>
                 <div className="mb-6">
                   {/* Services */}
-                  <section className="services_area" id="about">
-                    <div className="container">
-                      <div className="row">
-                        <div
-                          onClick={toggleModal}
-                          className="w-full sm:w-10/12 md:w-6/12 lg:w-4/12"
-                        >
-                          <div className="single_services text-center mt-8 mx-3">
-                            <div className="services_icon">
-                              <i className="lni lni-circle-plus"></i>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="94"
-                                height="92"
-                                viewBox="0 0 94 92"
-                              >
-                                <path
-                                  className="services_shape"
-                                  id="Polygon_12"
-                                  data-name="Polygon 12"
-                                  d="M42.212,2.315a11,11,0,0,1,9.576,0l28.138,13.6a11,11,0,0,1,5.938,7.465L92.83,54.018A11,11,0,0,1,90.717,63.3L71.22,87.842A11,11,0,0,1,62.607,92H31.393a11,11,0,0,1-8.613-4.158L3.283,63.3A11,11,0,0,1,1.17,54.018L8.136,23.383a11,11,0,0,1,5.938-7.465Z"
-                                />
-                              </svg>
-                            </div>
-                            <div className="services_content mt-5">
-                              <h3 className="services_title text-black font-semibold text-xl md:text-3xl">
-                                Add service
-                              </h3>
-                              {/* <p className="mt-4">I'm a client, hiring for a pro for job</p> */}
-                            </div>
-                          </div>
-                        </div>
-                        {isModalOpen && (
-                          <AddServiceModal onClose={toggleModal} />
-                        )}
-                      </div>
-
-                      <AllServices></AllServices>
-                    </div>
-                  </section>
-                  <div className="flex justify-between flex-wrap gap-2 w-full">
+                  <AllServices></AllServices>
+                  {/* <div className="flex justify-between flex-wrap gap-2 w-full">
                     <span className="text-gray-700 font-bold">
                       Web Developer
                     </span>
@@ -262,40 +199,9 @@ const Profil = () => {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
                     finibus est vitae tortor ullamcorper, ut vestibulum velit
                     convallis. Aenean posuere risus non velit egestas suscipit.
-                  </p>
+                  </p> */}
                 </div>
-                <div className="mb-6">
-                  <div className="flex justify-between flex-wrap gap-2 w-full">
-                    <span className="text-gray-700 font-bold">
-                      Web Developer
-                    </span>
-                    <p>
-                      <span className="text-gray-700 mr-2">at ABC Company</span>
-                      <span className="text-gray-700">2017 - 2019</span>
-                    </p>
-                  </div>
-                  <p className="mt-2">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    finibus est vitae tortor ullamcorper, ut vestibulum velit
-                    convallis. Aenean posuere risus non velit egestas suscipit.
-                  </p>
-                </div>
-                <div className="mb-6">
-                  <div className="flex justify-between flex-wrap gap-2 w-full">
-                    <span className="text-gray-700 font-bold">
-                      Web Developer
-                    </span>
-                    <p>
-                      <span className="text-gray-700 mr-2">at ABC Company</span>
-                      <span className="text-gray-700">2017 - 2019</span>
-                    </p>
-                  </div>
-                  <p className="mt-2">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    finibus est vitae tortor ullamcorper, ut vestibulum velit
-                    convallis. Aenean posuere risus non velit egestas suscipit.
-                  </p>
-                </div>
+              
               </div>
             </div>
           </div>
