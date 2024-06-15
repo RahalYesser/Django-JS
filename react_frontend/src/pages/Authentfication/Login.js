@@ -1,7 +1,7 @@
 import React,  { useState } from 'react'
 import axios from 'axios'
 import Topbar from '../../components/Topbar'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,Link } from 'react-router-dom'
 
 
 const Login = () => {
@@ -31,7 +31,7 @@ const Login = () => {
             navigate(`/${formData.username}/profile`); // Redirect to the profil
         } catch (error) {
             console.error('There was an error!', error.response.data);
-            setError(error.response.error);
+            setError(error.response.data.message);
         }
     }
   return (
@@ -49,7 +49,8 @@ const Login = () => {
                     </div>
                     <div className="w-full">
                         <div className="mx-4">
-                            <div className="single_form mt-5">
+                            <div className="single_form section_title mt-5">
+                                <label className="title" htmlFor="description">Username</label>
                                 <input height="12" 
                                 name="username" 
                                 id="email" 
@@ -65,7 +66,8 @@ const Login = () => {
                     </div>
                     <div className="w-full">
                         <div className="mx-4">
-                            <div className="single_form mt-5">
+                            <div className="single_form section_title mt-5">
+                                <label className="title" htmlFor="password">Password</label>
                                 <input name="password" 
                                 id="password" 
                                 type="password" 
@@ -79,7 +81,7 @@ const Login = () => {
                         </div>
                     </div>
 
-                    {error && <p classNameName="form-message mx-5 mt-4" style={{ color: 'red' }}>{error}</p>}
+                    {error && <p className="form-message mx-5 mt-4" style={{ color: 'red' }}>{error} ! </p>}
 
                     <p className="form-message mx-5 mt-4">Forget password ?</p>
                 
@@ -91,19 +93,22 @@ const Login = () => {
                         </div>
                     </div>
 
-                    <div className="w-full row justify-center ">
+                 {/*    <div className="w-full row justify-center ">
                         <div className="mx-4">
                             <div className="single_form mt-5">
                                 <p>Don't have a WorkWave account ?</p>
                             </div> 
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="w-full row justify-center pb-3">
                         <div className="mx-4">
-                            <div className="single_form mt-5">
-                                <button type="submit" className="form-btn">Sign up</button>
-                            </div> 
+                            <div className="row justify-center pt-6">
+                                <h6>Don't have a WorkWave account ? </h6> 
+                                <Link to='/signupas' className="pl-2 section_title">
+                                    <h6 className="title">Sign up</h6>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div> 

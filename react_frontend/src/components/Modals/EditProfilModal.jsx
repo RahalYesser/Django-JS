@@ -3,17 +3,27 @@ import IMG from "../../assets/images/utilisateur.png";
 import { FaPen } from "react-icons/fa";
 
 const EditProfilModal = ({ onClose,user }) => {
-
+  const [errors, setErrors] = useState({});
   const [userIMG, setUserIMG] = useState(IMG);
-
   const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    tel: '',
-    gender:'',
-    adresse: '',
-    email: '',
+    first_name: user.firstName,
+    last_name: user.lastName,
+    tel: user.tel,
+    region: user.region,
+    city: user.city,
+    street: user.street,
+    postalcode: user.postalcode,
+    domaine: user.domaine,
+    email: user.email,
   });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -53,13 +63,14 @@ const EditProfilModal = ({ onClose,user }) => {
                       <div className="row">
                         <div className="w-full md:w-1/2">
                           <div className="mx-2">
-                            <div className="single_form mt-2">
-                              <label htmlFor="date">First name</label>
+                            <div className="single_form section_title mt-2">
+                              <label className="title" htmlFor="first_name">First name</label>
                               <input
-                                value={user.firstName}
+                                onChange={handleChange}
+                                value={formData.first_name}
                                 required
-                                name="date"
-                                id="date"
+                                name="first_name"
+                                id="first_name"
                                 type="text"
                                 placeholder="First name"
                                 className="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"
@@ -72,13 +83,14 @@ const EditProfilModal = ({ onClose,user }) => {
                         </div>
                         <div className="w-full md:w-1/2">
                           <div className="mx-2">
-                            <div className="single_form mt-2">
-                              <label htmlFor="tarif">Last name</label>
+                            <div className="single_form section_title mt-2">
+                              <label className="title" htmlFor="last_name">Last name</label>
                               <input
-                                value={user.lastName}
+                                onChange={handleChange}
+                                value={formData.last_name}
                                 required
-                                name="tarif"
-                                id="tarif"
+                                name="last_name"
+                                id="last_name"
                                 type="text"
                                 placeholder="Last name"
                                 className="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"
@@ -93,10 +105,11 @@ const EditProfilModal = ({ onClose,user }) => {
                       <div className="row">
                         <div className="w-full md:w-1/2">
                           <div className="mx-2">
-                            <div className="single_form mt-2">
-                              <label htmlFor="tel">Phone</label>
+                            <div className="single_form section_title mt-2">
+                              <label className="title" htmlFor="tel">Phone</label>
                               <input
-                                value={user.tel}
+                                onChange={handleChange}
+                                value={formData.tel}
                                 required
                                 name="tel"
                                 id="tel"
@@ -112,15 +125,16 @@ const EditProfilModal = ({ onClose,user }) => {
                         </div>
                         <div className="w-full md:w-1/2">
                           <div className="mx-2">
-                            <div className="single_form mt-2">
-                            <label htmlFor="gender">Gender</label>
+                            <div className="single_form section_title mt-2">
+                            <label className="title" htmlFor="gender">Gender</label>
                                 <select
+                                onChange={handleChange}
                                 required
                                 name="gender"
                                 id="gender"
                                 className="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"
                                 >
-                                <option value="">Select Gender</option>
+                                <option defaultValue="">-- Select Gender --</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                                 <option value="prefer_not_to_say">
@@ -137,10 +151,11 @@ const EditProfilModal = ({ onClose,user }) => {
                       <div className="row">
                         <div className="w-full md:w-1/2">
                           <div className="mx-2">
-                            <div className="single_form mt-2">
-                              <label htmlFor="email">Email</label>
+                            <div className="single_form section_title mt-2">
+                              <label className="title" htmlFor="email">Email</label>
                               <input
-                                value={user.email}
+                                onChange={handleChange}
+                                value={formData.email}
                                 required
                                 name="email"
                                 id="email"
@@ -156,15 +171,16 @@ const EditProfilModal = ({ onClose,user }) => {
                         </div>
                         <div className="w-full md:w-1/2">
                           <div className="mx-2">
-                            <div className="single_form mt-2">
-                              <label htmlFor="tel">Phone</label>
+                            <div className="single_form section_title mt-2">
+                              <label className="title" htmlFor="domaine">Domaine</label>
                               <input
-                                value={user.tel}
+                                onChange={handleChange}
+                                value={formData.domaine}
                                 required
-                                name="tel"
-                                id="tel"
+                                name="domaine"
+                                id="domaine"
                                 type="text"
-                                placeholder="Phone"
+                                placeholder="Domaine"
                                 className="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"
                               />
                               {/*  {errors.tarif && (
@@ -174,10 +190,118 @@ const EditProfilModal = ({ onClose,user }) => {
                           </div>
                         </div>
                       </div>
+                      <div className="row">
+                <div className="w-full md:w-1/2">
+                  <div className="mx-2">
+                    <div className="single_form section_title mt-2">
+                      <label className="title" htmlFor="region">
+                        Region
+                      </label>
+                      <span style={{ color: "red" }}> *</span>
+                      <select
+                        value={formData.region}
+                        onChange={handleChange}
+                        required
+                        name="region"
+                        id="address_region"
+                        className="w-full select-1 rounded-md px-6 border border-solid border-body-color"
+                      >
+                        <option defaultValue="">-- Select your region --</option>
+                        <option value="ariana">Ariana</option>
+                        <option value="beja">Beja</option>
+                        <option value="ben-arous">Ben Arous</option>
+                        <option value="bizerte">Bizerte</option>
+                        <option value="gabes">Gabes</option>
+                        <option value="gafsa">Gafsa</option>
+                        <option value="jendouba">Jendouba</option>
+                        <option value="kairouan">Kairouan</option>
+                        <option value="kasserine">Kasserine</option>
+                        <option value="kebili">Kebili</option>
+                        <option value="kef">Kef</option>
+                        <option value="mahdia">Mahdia</option>
+                        <option value="manouba">Manouba</option>
+                        <option value="medenine">Medenine</option>
+                        <option value="monastir">Monastir</option>
+                        <option value="nabeul">Nabeul</option>
+                        <option value="sfax">Sfax</option>
+                        <option value="sidi-bouzid">Sidi Bouzid</option>
+                        <option value="siliana">Siliana</option>
+                        <option value="sousse">Sousse</option>
+                        <option value="tataouine">Tataouine</option>
+                        <option value="tozeur">Tozeur</option>
+                        <option value="tunis">Tunis</option>
+                        <option value="zaghouan">Zaghouan</option>
+                      </select>
+                      {errors.adresse && (
+                      <div className="error">{errors.adresse}</div>
+                    )}
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full md:w-1/2">
+                  <div className="mx-2">
+                    <div className="single_form section_title mt-2">
+                      <label className="title" htmlFor="city">
+                        City
+                      </label>
+                      <select
+                        value={formData.city}
+                        onChange={handleChange}
+                        name="city"
+                        id="address_city"
+                        className="w-full select-1 rounded-md px-6 border border-solid border-body-color"
+                      >
+                        <option defaultValue="">-- Select your city --</option>
+                        <option value="ElAlia">EL ALIA</option>
+                        <option value="city2">City 2</option>
+                        <option value="city3">City 3</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="w-full md:w-8/12">
+                  <div className="mx-2">
+                    <div className="single_form section_title mt-2">
+                      <label className="title" htmlFor="street">
+                        Street
+                      </label>
+                      <input
+                      value={formData.street}
+                      onChange={handleChange}
+                        name="street"
+                        id="address_street"
+                        type="text"
+                        placeholder="Street"
+                        className="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full lg:w-4/12">
+                  <div className="mx-2">
+                    <div className="single_form section_title mt-2">
+                      <label className="title" htmlFor="postalcode">
+                        Postal code
+                      </label>
+                      <input
+                      value={formData.postalcode}
+                      onChange={handleChange}
+                        name="postalcode"
+                        id="postal_code"
+                        type="text"
+                        placeholder="Postal Code"
+                        className="w-full input-1 rounded-md px-6 border border-solid border-body-color"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
                       <div className="w-full">
                         <div className="mx-2">
-                          <div className="single_form mt-2">
-                            <label htmlFor="description">About me</label>
+                          <div className="single_form section_title mt-2">
+                            <label className="title" htmlFor="description">About me</label>
                             <textarea
                               required
                               name="description"

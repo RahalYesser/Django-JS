@@ -2,6 +2,16 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
+class Adresse(models.Model):
+    region = models.CharField(max_length=255)
+    city = models.CharField(max_length=255,default = '',blank=True)
+    street = models.CharField(max_length=255,default = '',blank=True)
+    postalcode = models.CharField(max_length=255,default = '',blank=True)
+    class Meta:
+        db_table = "adresse"
+
+    def __str__(self):
+        return self.region
 
 class AutoEntrepreneur(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,default = '')
@@ -9,7 +19,7 @@ class AutoEntrepreneur(models.Model):
     lastName = models.CharField(max_length=255,default = '')
     description = models.TextField(default = '')
     tel = models.CharField(max_length=255)
-    adresse = models.CharField(max_length=255)
+    adresse = models.OneToOneField(Adresse,on_delete=models.CASCADE)
     domaine = models.CharField(max_length=255)
     disponibilite = models.CharField(max_length=255)
     gender = models.CharField(max_length=10,default = '')
@@ -27,7 +37,7 @@ class Client(models.Model):
     firstName = models.CharField(max_length=255,default = '')
     lastName = models.CharField(max_length=255,default = '')
     tel = models.CharField(max_length=8)
-    adresse = models.CharField(max_length=255)
+    adresse = models.OneToOneField(Adresse,on_delete=models.CASCADE)
     photo = models.FileField(upload_to='photos',default = '')
     gender = models.CharField(max_length=10,default = '')
     
@@ -41,7 +51,6 @@ class Service(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     date = models.DateField()
-    file = models.FileField(upload_to='service_files',default='')
     tarif = models.CharField(max_length=255)
     entrepreneur = models.ForeignKey(AutoEntrepreneur, on_delete=models.CASCADE)    
     class Meta:

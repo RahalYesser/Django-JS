@@ -138,11 +138,7 @@ def send_email_view(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_current_user(request):  
-    #username = data.get('username')
-    #plain_text_password = data.get('password')
     user = request.user
-    #hashed_pwd = make_password(user.email)
-    print(user.email)
     if user.is_authenticated:
         if hasattr(user, 'autoentrepreneur'):
             auto_entrepreneur = user.autoentrepreneur
@@ -155,7 +151,10 @@ def get_current_user(request):
                 'email':user.email,
                 'description': auto_entrepreneur.description,
                 'tel': auto_entrepreneur.tel,
-                'adresse': auto_entrepreneur.adresse,
+                'region': auto_entrepreneur.adresse.region,
+                'city': auto_entrepreneur.adresse.city,
+                'street': auto_entrepreneur.adresse.street,
+                'postalcode': auto_entrepreneur.adresse.postalcode,                
                 'domaine': auto_entrepreneur.domaine,
                 'disponibilite': auto_entrepreneur.disponibilite,
                 'gender': auto_entrepreneur.gender,
@@ -172,7 +171,10 @@ def get_current_user(request):
                 'firstName': client.firstName,
                 'lastName': client.lastName,
                 'tel': client.tel,
-                'adresse': client.adresse,
+                'region': client.adresse.region,
+                'city': client.adresse.city,
+                'street': client.adresse.street,
+                'postalcode': client.adresse.postalcode,
                 'email':user.email,
                 'photo': client.photo.url if client.photo else None,
                 'gender': client.gender,
