@@ -1,9 +1,9 @@
-import React from 'react';
+import React,{ useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 import './assets/css/tailwindcss.css'
 import './assets/css/animate.css'
 import './assets/fonts/lineicons/font-css/LineIcons.css'
-//import './assets/css/tiny-slider.css'
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import Layout from './components/Layout';
 import Home from './pages/Home'
@@ -13,8 +13,32 @@ import SignupasClient from './pages/Authentfication/SignupasClient';
 import SignupasSelfEmployed from './pages/Authentfication/SignupasSelfEmployed';
 import Profil from './pages/Profil';
 import PrivateRoute from './components/PrivateRoute'
+import AllServices from './pages/AllServices';
 
-function App() {
+
+const App= () => {
+ /*  const [user, setUser] = useState(null);
+  const fetchCurrentUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://127.0.0.1:8000/get_current_user/", {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      setTimeout(() => {
+        setUser(response.data);
+      }, 1000);
+      //setUser(response.data);
+      console.log(response.data)
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []); */
+
   return (
     <>
      <BrowserRouter>
@@ -27,6 +51,7 @@ function App() {
           <Route path='/login' element={<Login/>}></Route>
           <Route element={<PrivateRoute/>}>
             <Route path='/:username/profile' element={<Profil/>}></Route>
+            <Route path='/:username/allservices' element={<AllServices/>}></Route>
           </Route>
           {/* <PrivateRoute path="/profil" element={<Profil />} /> */}
           {/* <PrivateRoute path="/profil">

@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Carousel, Alert } from "flowbite-react";
 import axios from "axios";
 
-const AddServiceModal = ({ onClose, onServiceAdded }) => {
+const AddServiceModal = ({ onClose, onServiceAdded , user_id }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     date: "",
     files: [],
     tarif: "",
-    entrepreneur: 1,
+    entrepreneur: user_id,
   });
 
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -75,7 +75,7 @@ const AddServiceModal = ({ onClose, onServiceAdded }) => {
         tarif: "",
         title: "",
         files: [],
-        entrepreneur: 1,
+        entrepreneur: user_id,
       });
       setErrors({});
       setTimeout(() => {

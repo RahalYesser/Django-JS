@@ -14,12 +14,50 @@ class AutoEntrepreneurSerializer(serializers.ModelSerializer):
     class Meta:
         model = AutoEntrepreneur
         fields = '__all__'
+    
+    def update(self, instance, validated_data):
+        adresse_data = validated_data.pop('adresse', None)
+        print(instance)
+        if adresse_data:
+            # Update or create the Adresse instance
+            adresse_instance, created = Adresse.objects.update_or_create(
+                id=instance.adresse.id,
+                defaults=adresse_data
+            )
+            instance.adresse = adresse_instance
+        print("2",validated_data)
+
+        # Update the rest of the AutoEntrepreneur fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        instance.save()
+        return instance
 
 class ClientSerializer(serializers.ModelSerializer):
     adresse = AdresseSerializer()
     class Meta:
         model = Client
         fields = '__all__'
+
+    def update(self, instance, validated_data):
+        adresse_data = validated_data.pop('adresse', None)
+        print(instance)
+        if adresse_data:
+            # Update or create the Adresse instance
+            adresse_instance, created = Adresse.objects.update_or_create(
+                id=instance.adresse.id,
+                defaults=adresse_data
+            )
+            instance.adresse = adresse_instance
+        print("2",validated_data)
+
+        # Update the rest of the AutoEntrepreneur fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        instance.save()
+        return instance
 
 class ServiceFileSerializer(serializers.ModelSerializer):
     class Meta:

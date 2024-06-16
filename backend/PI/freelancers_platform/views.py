@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from .serializers import *
 from django.contrib.auth.models import User
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import Group
@@ -30,10 +31,18 @@ class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
 
+    @action(detail=False, methods=['get'])
+    def by_entrepreneur(self, request, entrepreneur_id):
+        autoentrepreneur = AutoEntrepreneur.objects.get(id=entrepreneur_id)
+        print("E : ",autoentrepreneur)
+        services = Service.objects.filter(entrepreneur=autoentrepreneur)
+        serializer = self.get_serializer(services, many=True)
+        return Response(serializer.data)
+    
 class DemandeViewSet(viewsets.ModelViewSet):
     queryset = Demande.objects.all()
     serializer_class = DemandeSerializer
-    
+      
 @api_view(['POST'])
 def clientSignup(request):
     serializer = ClientSignUpSerializer(data=request.data)
@@ -159,7 +168,7 @@ def get_current_user(request):
                 'disponibilite': auto_entrepreneur.disponibilite,
                 'gender': auto_entrepreneur.gender,
                 'note': auto_entrepreneur.note,
-                'photo': auto_entrepreneur.photo.url if auto_entrepreneur.photo else None,
+                'photo': f"http://localhost:8000{auto_entrepreneur.photo.url}" if auto_entrepreneur.photo else None,
                 'valid': auto_entrepreneur.valid,
             }
         elif hasattr(user, 'client'):
@@ -176,7 +185,7 @@ def get_current_user(request):
                 'street': client.adresse.street,
                 'postalcode': client.adresse.postalcode,
                 'email':user.email,
-                'photo': client.photo.url if client.photo else None,
+                'photo': f"http://localhost:8000{client.photo.url}" if client.photo else None,
                 'gender': client.gender,
             }
         else:

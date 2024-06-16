@@ -4,7 +4,7 @@ import AddServiceModal from "../Modals/AddServiceModal";
 import { Carousel } from "flowbite-react";
 import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
 
-const AllServices = () => {
+const AllServices = ({user}) => {
   const [services, setServices] = useState([]);
   const [error, setError] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -27,6 +27,23 @@ const AllServices = () => {
 
   const fetchServices = async () => {
     try {
+      const token = localStorage.getItem("token");
+      //console.log(user.id);
+      const response = axios.get(`http://127.0.0.1:8000/services-by-entrepreneur/${user.id}/` , {
+      headers: {
+        Authorization: `Token ${token}`,
+      }},);
+      setServices((await response).data);
+    } catch (err) {
+      console.log(err.response.data);
+      setError(err.response.data);
+    }
+
+  };
+
+/*   const fetchAllServices = async () => {
+    try {
+      console.log(user.id);
       const response = await axios.get("http://127.0.0.1:8000/services/");
       setServices(response.data);
       console.log(response.data);
@@ -34,7 +51,7 @@ const AllServices = () => {
       console.log(err.response.data);
       setError(err);
     }
-  };
+  }; */
 
   useEffect(() => {
     fetchServices();
@@ -87,6 +104,7 @@ const AllServices = () => {
                 </div>
                 {isAddModalOpen && (
                   <AddServiceModal
+                    user_id={user.id}
                     onClose={toggleAddModal}
                     onServiceAdded={fetchServices}
                   />

@@ -4,21 +4,23 @@ import Topbar_profil from "../components/Topbar_profil";
 import Footer from "../components/Home/Footer";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import AllServices from "../components/Services/AllServices";
+import AllServices from "../components/Services/ServicesBySelfEpmoyed";
 import userIMG from "../assets/images/utilisateur.png"
 import { FaPen } from "react-icons/fa";
 import EditProfilModal from "../components/Modals/EditProfilModal";
 
 const Profil = () => {
-  const [user, setUser] = useState(false);
+  const [ user, setUser] = useState(false);
   const { username } = useParams();
+  //const  [username, setUsername] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const imageUrl = user.photo ? user.photo : userIMG;
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const fetchCurrenUser = async () => {
+ /*  const fetchCurrenUser = async () => {
     try {
       const token = localStorage.getItem("token");
       console.log(token);
@@ -35,15 +37,35 @@ const Profil = () => {
     } catch (error) {
       console.error(error.message);
     }
+  }; */
+   const fetchCurrentUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://127.0.0.1:8000/get_current_user/", {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      setUser(response.data);
+      console.log(response.data)
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
-  useEffect(() => {  
-    fetchCurrenUser();
-  }, [username]);
+   useEffect(() => {  
+     fetchCurrentUser();
+   },[]);  
+
+  
+
+  if (!user) {
+    return <h1 >Loading...</h1>;
+  }
 
   return (
     <>
-      <Topbar_profil user={user}/>
+      <Topbar_profil user={user}/> 
 
       <div className="bg-gray-100 pt-18">
         <div className="profile mx-auto py-12">
@@ -51,17 +73,16 @@ const Profil = () => {
             <div className="lg:col-span-3 sm:col-span-full md:col-span-full">
               <div className="bg-gray shadow rounded-lg p-6">
                 <div className="flex flex-col items-center ">
+                  
                   <img
-                    src={userIMG}
-                    className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
+                    src={imageUrl}
+                    className="w-48 h-48 bg-gray-300 rounded-full mb-2"
                   ></img>
                   <h1 className="text-xl font-bold">
                     {user.firstName} {user.lastName}
                   </h1>
                   <p className="text-gray-700">username: {username}</p>
-                    {user.domaine && (<div className="title-1">
-                      <p>{user.domaine}</p>
-                    </div> )} 
+                    
                   <div className="mt-6  flex flex-col gap-2 items-center">
                     <a onClick={toggleModal} className="form-btn">
                       <span className="pr-3">Edit</span> <FaPen/>
@@ -69,14 +90,17 @@ const Profil = () => {
                     <div className="uppercase justify-center">
                       <p>{user.user_type}</p>
                     </div>
+                    {user.domaine && (<div className="title-1">
+                      <p>{user.domaine}</p>
+                    </div> )} 
                    
-                    {isModalOpen && (
+                     {isModalOpen && (
                       <EditProfilModal
                       user={user}
-                      username={username}
+                      onProfilUpdated={fetchCurrentUser}                      
                       onClose={toggleModal}
                       />
-                    )}
+                    )}  
         
                   </div>
                 </div>
@@ -109,7 +133,7 @@ const Profil = () => {
                  <div>
                   <h2 className="text-xl font-bold">MY SERVICES</h2>
                   <div className="mb-6">            
-                       <AllServices></AllServices>                
+                       <AllServices user={user} ></AllServices>                
                   </div>
                 </div>
                 )}

@@ -1,21 +1,22 @@
 import React, { useState, useEffect }from 'react'
 import logo1 from '../assets/images/WorkWave.png'
-import IMG from '../assets/images/utilisateur.png';
-import { useNavigate  } from 'react-router-dom';
+import userIMG from '../assets/images/utilisateur.png';
+import { Link, useNavigate  } from 'react-router-dom';
 import axios from 'axios'
 
 const Topbar_profil = ({ user }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [userIMG, setUserIMG] = useState(IMG);
     const navigate = useNavigate();
-
-    if (user.photo) {
-        setUserIMG(user.photo);
-    }
+    const imageUrl = user.photo ? user.photo : userIMG;
 
     const toggleMenu = () => {
       setIsOpen(!isOpen);
     };
+
+    const navigateToServices = () => {      
+        navigate(`/${user.username}/allservices`);       
+    };
+
     const handleLogout = async () => {
         try {
           const token = localStorage.getItem('token');
@@ -24,7 +25,7 @@ const Topbar_profil = ({ user }) => {
                 Authorization: `Token ${token}`,
             },
             }).then((response) => {
-                //console.log(response.data);
+                console.log(response.data);
             });
           localStorage.removeItem('token');
           navigate('/');
@@ -40,7 +41,7 @@ const Topbar_profil = ({ user }) => {
         }
     };
 
-    useEffect(() => {
+     useEffect(() => {
         if (isOpen) {
             document.addEventListener('click', handleClickOutside);
         } else {
@@ -49,7 +50,7 @@ const Topbar_profil = ({ user }) => {
         return () => {
             document.removeEventListener('click', handleClickOutside);
         };
-    }, [isOpen]);
+    }, [isOpen]); 
     
   return (
     <>
@@ -59,7 +60,7 @@ const Topbar_profil = ({ user }) => {
                 <div className="w-full">
                     <nav className="flex items-center justify-between py-4 navbar navbar-expand-lg">
                         <a className="navbar-brand mr-5" href="">
-                            <img width="200" src={logo1} alt="Logo"/>
+                            <img width="160" src={logo1} alt="Logo"/>
                         </a>
                         <div className="absolute left-0 z-20 w-full px-5 py-3 duration-300 bg-white lg:w-auto lg:block top-full mt-full lg:static lg:bg-transparent shadow lg:shadow-none" id="navbarOne">
                                 <ul id="nav" className="items-center content-start mr-auto lg:justify-end navbar-nav lg:flex">
@@ -70,7 +71,7 @@ const Topbar_profil = ({ user }) => {
                                         <a className="page-scroll" href="#about">About</a>
                                     </li>
                                     <li className="nav-item ml-5 lg:ml-11">
-                                        <a className="page-scroll" href="#services">Services</a>
+                                        <Link to={`/${user.username}/allservices`} className="page-scroll" >Services</Link>
                                     </li>
                                     <li className="nav-item ml-5 lg:ml-11">
                                         <a className="page-scroll" href="#contact">Contact</a>
@@ -91,7 +92,7 @@ const Topbar_profil = ({ user }) => {
                                         <span className="sr-only">Open user menu</span>
                                         <img
                                             className="h-8 w-8 rounded-full"
-                                            src={userIMG}
+                                            src={imageUrl}
                                         />
                                         </button>
                                     </div>
@@ -106,7 +107,8 @@ const Topbar_profil = ({ user }) => {
                                         tabIndex="-1"
                                         >
                                         <li className="nav-item mx-3 mt-2">
-                                        <a
+                                        <Link
+                                            to={`/${user.username}/profile`}
                                             href="#"
                                             className="block px-4 py-2 text-sm text-gray-700"
                                             role="menuitem"
@@ -114,7 +116,7 @@ const Topbar_profil = ({ user }) => {
                                             id="user-menu-item-0"
                                         >
                                             Your Profile
-                                        </a>
+                                        </Link>
                                         </li>
                                         <li className="nav-item mx-3">
                                        {/*  <a
