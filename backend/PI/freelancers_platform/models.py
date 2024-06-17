@@ -82,8 +82,8 @@ class Demande(models.Model):
 
 class Feedback(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE,default = '')
-    entrepreneur = models.ForeignKey(Service, on_delete=models.CASCADE,default = '')
-    subject = models.CharField(max_length=255,default = '')
+    service = models.ForeignKey(Service, on_delete=models.CASCADE,default = '')
+    rate = models.PositiveSmallIntegerField(default = None)
     message = models.TextField(default = '')
     created_at = models.DateTimeField(default=datetime.now)
 

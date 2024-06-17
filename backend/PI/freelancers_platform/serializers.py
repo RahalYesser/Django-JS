@@ -107,8 +107,13 @@ class ServiceSerializer(serializers.ModelSerializer):
 
         return instance
 
-class DemandeSerializer(serializers.ModelSerializer):
+class DemandeReadSerializer(serializers.ModelSerializer):
     service = ServiceSerializer()
+    class Meta:
+        model = Demande
+        fields = '__all__'
+
+class DemandeWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Demande
         fields = '__all__'
@@ -148,3 +153,14 @@ class EntreproneurSignUpSerializer(ModelSerializer):
         entreproneur = AutoEntrepreneur.objects.create(user=user, adresse=adresse, **validated_data)
         Token.objects.create(user=user)
         return entreproneur
+
+class FeedbackReadSerializer(serializers.ModelSerializer):
+    client = ClientSerializer()
+    class Meta:
+        model = Feedback
+        fields = '__all__'
+    
+class FeedbackWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = '__all__'

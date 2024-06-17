@@ -7,7 +7,8 @@ routes=routers.DefaultRouter()
 routes.register('client',ClientViewSet)
 routes.register('auto-entrepreneurs', AutoEntrepreneurViewSet)
 routes.register('services', ServiceViewSet)
-routes.register('demandes', DemandeViewSet)
+routes.register('demandes', DemandeWriteViewSet)
+routes.register('feedbacks', FeedbackWriteViewSet)
 
 urlpatterns=[
     path('',include(routes.urls)),
@@ -19,6 +20,7 @@ urlpatterns=[
     path('get_current_user/', get_current_user),
     path('services-by-entrepreneur/<int:entrepreneur_id>/',ServiceViewSet.as_view({'get':'by_entrepreneur'})),
     path('demandes-by-client/<int:client_id>/',DemandeViewSet.as_view({'get':'by_client'})),
+    path('feedbacks-by-service/<int:service_id>/',FeedbackViewSet.as_view({'get':'by_service'})),
 
 
 ]

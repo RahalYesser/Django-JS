@@ -3,6 +3,7 @@ import axios from "axios";
 import AddServiceModal from "../Modals/AddServiceModal";
 import { Carousel } from "flowbite-react";
 import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
+import { Link } from "react-router-dom";
 
 const AllServices = ({user}) => {
   const [services, setServices] = useState([]);
@@ -123,12 +124,13 @@ const AllServices = ({user}) => {
 
                     <ul className="social absolute top-4 right-17">
                       <li>
-                        <a href="#">
-                          <i className="lni lni-eye"></i>
-                        </a>
+                        <Link to={`/${user.username}/services/${service.id}`} >
+                            <i className="lni lni-eye"></i>
+                        </Link>
+                        
                       </li>
                       <li>
-                        <a href="#">
+                        <a href="">
                           <i className="lni lni-pencil"></i>
                         </a>
                       </li>
@@ -140,7 +142,8 @@ const AllServices = ({user}) => {
                       {isDeleteModalOpen && (
                         <ConfirmDeleteModal
                           onClose={toggleDeleteModal}
-                          onServiceDeleted={deleteService}
+                          onDeleted={deleteService}
+                          item={'service'}
                         />
                       )}
                     </ul>

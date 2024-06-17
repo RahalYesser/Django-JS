@@ -3,9 +3,25 @@ import axios from "axios";
 import { Popover } from "flowbite-react";
 import { FaEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
+
 
 const DemandesByClient = ({ user }) => {
   const [demandes, setDemandes] = useState([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(null);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [error, setError] = useState(null);
+
+  const handleDeleteClick = (item) => {
+    setItemToDelete(item);
+    setIsDeleteModalOpen(true);
+  };
+
+  const toggleDeleteModal = () => {
+    setIsDeleteModalOpen(!isDeleteModalOpen);
+    setItemToDelete(null);
+  };
+
   const fetchDemandes = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -26,12 +42,25 @@ const DemandesByClient = ({ user }) => {
     }
   };
 
+  const deleteDemande = async () => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/demandes/${itemToDelete.id}/`);
+      setDemandes(demandes.filter((demande) => demande.id !== itemToDelete.id));
+      toggleDeleteModal();
+    } catch (err) {
+      console.error(err);
+      setError(err);
+    }
+  };
+
   useEffect(() => {
     fetchDemandes();
   }, []);
 
   return (
     <>
+     {demandes.length > 0 ? ( 
+        demandes.map((demande) => (
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-2">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -48,7 +77,7 @@ const DemandesByClient = ({ user }) => {
             </tr>
           </thead>
           <tbody>
-            {demandes.map((demande) => (
+        
               <tr key={demande.id} class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th
                   scope="row"
@@ -83,18 +112,38 @@ const DemandesByClient = ({ user }) => {
                   </Popover>
                 </td>
                 <td class="px-6 py-4 text-right">
-                  <a
-                    href="#"
+                  <a 
+                    onClick={() => handleDeleteClick(demande)}
                     class="font-medium text-red-600 dark:text-red-500 hover:underline"
                   >
                     Delete
                   </a>
                 </td>
               </tr>
-            ))}
+           
           </tbody>
         </table>
+        {error && <div className="error">{error}</div>}
+
+        {isDeleteModalOpen && (
+                        <ConfirmDeleteModal
+                          onClose={toggleDeleteModal}
+                          onDeleted={deleteDemande}
+                          item={'demande'}
+                        />
+                      )}
       </div>
+       )) 
+       ) : (
+         <div className="section_title flex flex-row justify-between">
+            <div className="sub_title pr-6">You don't have any demandes.</div>
+            <div>         
+            <span className="text-lg pr-1"> demande from here </span> 
+            <Link to={`/${user.username}/allservices`} className="text-lg hover:text-theme-color"> Services</Link>
+            </div> 
+         </div>
+       )}
+       
     </>
   );
 };

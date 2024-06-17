@@ -38,9 +38,22 @@ class ServiceViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(services, many=True)
         return Response(serializer.data)
     
+    @action(detail=False, methods=['get'])
+    def by_region_and_domain(self, request):
+        region = request.query_params.get('region')
+        domain = request.query_params.get('domaine')
+        entrepreneurs = AutoEntrepreneur.objects.all()
+        if region:
+            entrepreneurs = entrepreneurs.filter(adresse__region=region)
+        if domain:
+            entrepreneurs = entrepreneurs.filter(domaine=domain)
+        services = Service.objects.filter(entrepreneur__in=entrepreneurs)
+        serializer = self.get_serializer(services, many=True)
+        return Response(serializer.data)
+    
 class DemandeViewSet(viewsets.ModelViewSet):
     queryset = Demande.objects.all()
-    serializer_class = DemandeSerializer
+    serializer_class = DemandeReadSerializer
 
     @action(detail=False, methods=['get'])
     def by_client(self, request, client_id):
@@ -48,6 +61,38 @@ class DemandeViewSet(viewsets.ModelViewSet):
         demandes = Demande.objects.filter(client=client)
         serializer = self.get_serializer(demandes, many=True)
         return Response(serializer.data)
+    
+class DemandeWriteViewSet(viewsets.ModelViewSet):
+    queryset = Demande.objects.all()
+    serializer_class = DemandeReadSerializer
+
+    def create(self, request):
+        serializer = DemandeWriteSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class FeedbackViewSet(viewsets.ModelViewSet):
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackReadSerializer
+    
+    def by_service(self, request, service_id):
+        service = Service.objects.get(id=service_id)
+        feedbacks = Feedback.objects.filter(service=service).order_by('-created_at')
+        serializer = self.get_serializer(feedbacks, many=True)
+        return Response(serializer.data)
+    
+class FeedbackWriteViewSet(viewsets.ModelViewSet):
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackWriteSerializer
+   
+    def create(self, request):
+        serializer = FeedbackWriteSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
       
 @api_view(['POST'])
 def clientSignup(request):
@@ -131,8 +176,7 @@ def logout(request):
 @csrf_exempt
 def send_email_view(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        
+        data = json.loads(request.body)     
         subject = data.get('subject', 'No Subject')
         message = data.get('message', '')
         from_email = settings.EMAIL_HOST_USER
