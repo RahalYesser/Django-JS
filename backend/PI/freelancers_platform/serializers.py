@@ -9,8 +9,15 @@ class AdresseSerializer(serializers.ModelSerializer):
         model = Adresse
         fields = '__all__'
 
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username','email','password')
+
 class AutoEntrepreneurSerializer(serializers.ModelSerializer):
     adresse = AdresseSerializer()
+    user = UserSerializer()
     class Meta:
         model = AutoEntrepreneur
         fields = '__all__'
@@ -101,14 +108,10 @@ class ServiceSerializer(serializers.ModelSerializer):
         return instance
 
 class DemandeSerializer(serializers.ModelSerializer):
+    service = ServiceSerializer()
     class Meta:
         model = Demande
         fields = '__all__'
-
-class UserSerializer(ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username','email','password')
 
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)

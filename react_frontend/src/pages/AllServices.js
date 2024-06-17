@@ -3,6 +3,7 @@ import axios from "axios";
 import Topbar_profil from "../components/Topbar_profil";
 import Footer from "../components/Home/Footer";
 import { Carousel } from "flowbite-react";
+import { Link } from "react-router-dom";
 
 const AllServices = () => {
   const [user, setUser] = useState(null);
@@ -116,9 +117,9 @@ const AllServices = () => {
                   <div class="row justify-center lg:justify-start">
                   {services.map((service) => (
 
-                    <div class="w-full md:w-8/12 lg:w-6/12 xl:w-4/12">
-                      <div class="single_blog mx-2 mt-4 rounded-xl bg-white transition-all duration-300 overflow-hidden hover:shadow-lg">
-                        <div class="blog_image">
+                    <div key ={service.id} class="w-full md:w-8/12 lg:w-6/12 xl:w-4/12">
+                      <div className="single_blog mx-2 mt-4 rounded-xl bg-white transition-all duration-300 overflow-hidden hover:shadow-lg">
+                        <div className="blog_image">
                         <div className="w-full sm:h-64 xl:h-80 2xl:h-96 ">
                                     <Carousel pauseOnHover>
                                       {service.files.map((file) => (
@@ -136,12 +137,12 @@ const AllServices = () => {
                             class="w-full"
                           /> */}
                         </div>
-                        <div class="blog_content p-4 md:p-4">
-                          <ul class="blog_meta flex justify-between">
-                            <li class="text-body-color text-sm md:text-base">
+                        <div className="blog_content p-4 md:p-4">
+                          <ul className="blog_meta flex justify-between">
+                            <li className="text-body-color text-sm md:text-base">
                               <a
                                 href="#"
-                                class="text-body-color hover:text-theme-color"
+                                className="text-body-color hover:text-theme-color"
                               >
                                 {service.tarif} $
                               </a>
@@ -150,12 +151,12 @@ const AllServices = () => {
                                 {service.date}
                             </li>
                           </ul>
-                          <h3 class="blog_title">
+                          <h3 className="blog_title">
                             <a href="#">{service.title}</a>
                           </h3>
-                          <a href="#" class="more_btn">
+                          <Link to={`/${user.username}/services/${service.id}`} className="more_btn">
                             Read More
-                          </a>
+                          </Link>
                         </div>
                       </div>
                     </div>

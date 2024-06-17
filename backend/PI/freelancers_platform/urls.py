@@ -18,5 +18,7 @@ urlpatterns=[
     path('send-email/', send_email_view),
     path('get_current_user/', get_current_user),
     path('services-by-entrepreneur/<int:entrepreneur_id>/',ServiceViewSet.as_view({'get':'by_entrepreneur'})),
+    path('demandes-by-client/<int:client_id>/',DemandeViewSet.as_view({'get':'by_client'})),
+
 
 ]

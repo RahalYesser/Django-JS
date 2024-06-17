@@ -41,17 +41,6 @@ const AllServices = ({user}) => {
 
   };
 
-/*   const fetchAllServices = async () => {
-    try {
-      console.log(user.id);
-      const response = await axios.get("http://127.0.0.1:8000/services/");
-      setServices(response.data);
-      console.log(response.data);
-    } catch (err) {
-      console.log(err.response.data);
-      setError(err);
-    }
-  }; */
 
   useEffect(() => {
     fetchServices();

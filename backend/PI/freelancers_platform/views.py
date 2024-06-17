@@ -34,7 +34,6 @@ class ServiceViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def by_entrepreneur(self, request, entrepreneur_id):
         autoentrepreneur = AutoEntrepreneur.objects.get(id=entrepreneur_id)
-        print("E : ",autoentrepreneur)
         services = Service.objects.filter(entrepreneur=autoentrepreneur)
         serializer = self.get_serializer(services, many=True)
         return Response(serializer.data)
@@ -42,6 +41,13 @@ class ServiceViewSet(viewsets.ModelViewSet):
 class DemandeViewSet(viewsets.ModelViewSet):
     queryset = Demande.objects.all()
     serializer_class = DemandeSerializer
+
+    @action(detail=False, methods=['get'])
+    def by_client(self, request, client_id):
+        client = Client.objects.get(id=client_id)
+        demandes = Demande.objects.filter(client=client)
+        serializer = self.get_serializer(demandes, many=True)
+        return Response(serializer.data)
       
 @api_view(['POST'])
 def clientSignup(request):

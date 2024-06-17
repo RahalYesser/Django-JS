@@ -14,6 +14,7 @@ import SignupasSelfEmployed from './pages/Authentfication/SignupasSelfEmployed';
 import Profil from './pages/Profil';
 import PrivateRoute from './components/PrivateRoute'
 import AllServices from './pages/AllServices';
+import ServiceById from './components/Services/ServiceById';
 
 
 const App= () => {
@@ -52,12 +53,8 @@ const App= () => {
           <Route element={<PrivateRoute/>}>
             <Route path='/:username/profile' element={<Profil/>}></Route>
             <Route path='/:username/allservices' element={<AllServices/>}></Route>
-          </Route>
-          {/* <PrivateRoute path="/profil" element={<Profil />} /> */}
-          {/* <PrivateRoute path="/profil">
-            <Profil />
-          </PrivateRoute> */}
-                  
+            <Route path='/:username/services/:service_id' element={<ServiceById/>}></Route>
+          </Route>                 
          </Route>   
        </Routes>
      </BrowserRouter>

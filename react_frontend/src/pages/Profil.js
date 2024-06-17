@@ -4,10 +4,11 @@ import Topbar_profil from "../components/Topbar_profil";
 import Footer from "../components/Home/Footer";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import AllServices from "../components/Services/ServicesBySelfEpmoyed";
+import ServicesBySelfEpmoyed from "../components/Services/ServicesBySelfEpmoyed";
 import userIMG from "../assets/images/utilisateur.png"
 import { FaPen } from "react-icons/fa";
 import EditProfilModal from "../components/Modals/EditProfilModal";
+import DemandesByClient from "../components/Services/DemandesByClient";
 
 const Profil = () => {
   const [ user, setUser] = useState(false);
@@ -20,24 +21,6 @@ const Profil = () => {
     setIsModalOpen(!isModalOpen);
   };
 
- /*  const fetchCurrenUser = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      console.log(token);
-      axios
-        .get("http://127.0.0.1:8000/get_current_user/", {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          setUser(response.data);
-        });
-    } catch (error) {
-      console.error(error.message);
-    }
-  }; */
    const fetchCurrentUser = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -67,7 +50,7 @@ const Profil = () => {
     <>
       <Topbar_profil user={user}/> 
 
-      <div className="bg-gray-100 pt-18">
+      <div className="bg-gray-100 mt-14">
         <div className="profile mx-auto py-12">
           <div className="grid lg:grid-cols-12 sm:grid-cols-12 gap-6 px-2">
             <div className="lg:col-span-3 sm:col-span-full md:col-span-full">
@@ -133,7 +116,7 @@ const Profil = () => {
                  <div>
                   <h2 className="text-xl font-bold">MY SERVICES</h2>
                   <div className="mb-6">            
-                       <AllServices user={user} ></AllServices>                
+                      <ServicesBySelfEpmoyed user={user} ></ServicesBySelfEpmoyed>                
                   </div>
                 </div>
                 )}
@@ -141,7 +124,8 @@ const Profil = () => {
                 {user.user_type === 'client' && (
                  <div>
                   <h2 className="text-xl font-bold">MY DEMANDES</h2>
-                  <div className="mb-6">            
+                  <div className="mb-6"> 
+                    <DemandesByClient user={user}></DemandesByClient>           
                   </div>
                 </div>
                 )}
