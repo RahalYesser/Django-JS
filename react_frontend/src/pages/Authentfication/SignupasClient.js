@@ -211,6 +211,8 @@ const SignupasClient = () => {
                         <option value="el alia">EL ALIA</option>
                         <option value="bizerte sud">Bizerte sud</option>
                         <option value="bizerte sud">Bizerte nord</option>
+                                <option value="Ras Jbal">Ras Jbal</option>
+                                <option value="Metline">Metline</option>
                       </select>
                     </div>
                   </div>

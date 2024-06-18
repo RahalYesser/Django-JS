@@ -80,7 +80,6 @@ const Feedback = ({ user, service }) => {
       setFeedbacks(response.data);
     } catch (err) {
       console.log(err.response.data);
-      //setError(err);
     }
   };
 
@@ -132,13 +131,15 @@ const Feedback = ({ user, service }) => {
           },
         }
       );
-      console.log("Service created successfully:", response.data);
       setFormData({
         client: user.id,
         service: service.id,
-        rate: "",
+        rate: 0,
         message: "",
       });
+      console.log("Service created successfully:", response.data);     
+      getFeedbacksByService();
+      
     } catch (error) {
       if (error.response && error.response.status === 400) {
         console.error("400 error occurred:", error);
@@ -191,6 +192,7 @@ const Feedback = ({ user, service }) => {
                   onChange={handleChange}
                   name="message"
                   id="message"
+                  value={formData.message}
                   placeholder="Message"
                   className="w-full rounded-md py-4 px-6 border border-solid border-body-color"
                 ></textarea>

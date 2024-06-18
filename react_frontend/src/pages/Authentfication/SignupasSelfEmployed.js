@@ -155,7 +155,31 @@ const SignupasSelfEmployed = () => {
                 <div className="w-full md:w-1/2">
                   <div className="mx-4">
                     <div className="single_form section_title mt-5">
-                      <label required className="title" htmlFor="domaine">
+                    <label className="title " htmlFor="domaine">
+                      Domain :
+                    </label>
+                    <span style={{ color: "red" }}> *</span>
+                    <select
+                      onChange={handleChange}
+                      value={formData.domaine}
+                      required
+                      name="domaine"
+                      id="domaine"
+                      className="w-full select-1 rounded-md px-6 border border-solid border-body-color"
+                    >
+                      <option value=""> -- Select domain --</option>
+                      <option value="carpenter">Carpenter</option>
+                      <option value="electrician">Electrician</option>
+                      <option value="plumber">Plumber</option>
+                      <option value="painter">Painter</option>
+                      <option value="bricklayer">Bricklayer</option>
+                      <option value="metalworker">Metalworker</option>
+                      <option value="mechanic">Mechanic</option>
+                    </select>
+                    {errors.domaine && (
+                        <div className="error">{errors.domaine}</div>
+                      )}
+                      {/* <label required className="title" htmlFor="domaine">
                         Domaine
                       </label>
                       <span style={{ color: "red" }}> *</span>
@@ -171,7 +195,7 @@ const SignupasSelfEmployed = () => {
                       />
                       {errors.domaine && (
                         <div className="error">{errors.domaine}</div>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>
@@ -239,9 +263,11 @@ const SignupasSelfEmployed = () => {
                         className="w-full select-1 rounded-md px-6 border border-solid border-body-color"
                       >
                         <option defaultValue="">-- Select your city --</option>
-                        <option value="ElAlia">EL ALIA</option>
-                        <option value="city2">City 2</option>
-                        <option value="city3">City 3</option>
+                        <option value="El Alia">EL ALIA</option>
+                        <option value="Ras Jbal">Ras Jbal</option>
+                        <option value="Metline">Metline</option>
+                        <option value="bizerte sud">Bizerte sud</option>
+                        <option value="bizerte sud">Bizerte nord</option>
                       </select>
                     </div>
                   </div>

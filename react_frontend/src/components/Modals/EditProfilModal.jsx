@@ -8,9 +8,11 @@ const EditProfilModal = ({ onClose, onProfilUpdated, user }) => {
   const [userIMG, setUserIMG] = useState(user.photo || IMG);
 
   const initialFormData = {
+    user: user,
     firstName: user.firstName,
     lastName: user.lastName,
     tel: user.tel,
+    gender:user.gender,
     region: user.region,
     city: user.city,
     street: user.street,
@@ -25,35 +27,6 @@ const EditProfilModal = ({ onClose, onProfilUpdated, user }) => {
   };
 
   const [formData, setFormData] = useState(initialFormData);
-
-  /* if (user.user_type === "auto_entrepreneur") {
-    const [formData, setFormData] = useState({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      tel: user.tel,
-      region: user.region,
-      city: user.city,
-      street: user.street,
-      postalcode: user.postalcode,
-      domaine: user.domaine,
-      disponibilite: "Full time",
-      photo: user.photo,
-      email: user.email,
-      description: user.description,
-    });
-  } else {
-    const [formData, setFormData] = useState({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      tel: user.tel,
-      region: user.region,
-      city: user.city,
-      street: user.street,
-      postalcode: user.postalcode,
-      photo: user.photo,
-      email: user.email,
-    });
-  } */
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,7 +56,7 @@ const EditProfilModal = ({ onClose, onProfilUpdated, user }) => {
     updatedFormData.append("lastName", formData.lastName);
     updatedFormData.append("tel", formData.tel);
     updatedFormData.append("email", formData.email);
-
+    updatedFormData.append("gender", formData.gender);
     // Check if the photo was changed
     if (formData.photo !== user.photo) {
       updatedFormData.append("photo", formData.photo);
@@ -93,16 +66,17 @@ const EditProfilModal = ({ onClose, onProfilUpdated, user }) => {
       updatedFormData.append("disponibilite", formData.disponibilite);
       updatedFormData.append("description", formData.description);
     }
+    //updatedFormData.append("user.email", formData.user_id);
     updatedFormData.append("adresse.region", formData.region);
     updatedFormData.append("adresse.city", formData.city);
     updatedFormData.append("adresse.street", formData.street);
     updatedFormData.append("adresse.postalcode", formData.postalcode);
 
-    const apiURL = user.user_type === "auto_entrepreneur" 
-      ? `http://127.0.0.1:8000/auto-entrepreneurs/${user.id}/` 
-      : `http://127.0.0.1:8000/client/${user.id}/`;
+    const apiURL =
+      user.user_type === "auto_entrepreneur"
+        ? `http://127.0.0.1:8000/auto-entrepreneurs-write/${user.id}/`
+        : `http://127.0.0.1:8000/client/${user.id}/`;
 
-    console.log()
     axios
       .put(apiURL, updatedFormData, {
         headers: {
@@ -224,6 +198,7 @@ const EditProfilModal = ({ onClose, onProfilUpdated, user }) => {
                                 Gender
                               </label>
                               <select
+                                value={formData.gender}
                                 onChange={handleChange}
                                 required
                                 name="gender"
@@ -270,31 +245,39 @@ const EditProfilModal = ({ onClose, onProfilUpdated, user }) => {
                             </div>
                           </div>
                         </div>
-                        { formData.domaine && 
-                        <div className="w-full md:w-1/2">
-                          <div className="mx-2">
-                            <div className="single_form section_title mt-2">
-                              <label className="title" htmlFor="domaine">
-                                Domaine
-                              </label>
-                              <span style={{ color: "red" }}> *</span>
-                              <input
-                                onChange={handleChange}
-                                value={formData.domaine}
-                                required
-                                name="domaine"
-                                id="domaine"
-                                type="text"
-                                placeholder="Domaine"
-                                className="w-full input-1 rounded-md py-4 px-6 border border-solid border-body-color"
-                              />
-                              {/*  {errors.tarif && (
-                              <div className="error">{errors.tarif}</div>
-                            )} */}
+                        {formData.domaine && (
+                          <div className="w-full md:w-1/2">
+                            <div className="mx-2">
+                              <div className="single_form section_title mt-2">
+                                <label className="title " htmlFor="domaine">
+                                  Domain :
+                                </label>
+                                <span style={{ color: "red" }}> *</span>
+                                <select
+                                  onChange={handleChange}
+                                  value={formData.domaine}
+                                  required
+                                  name="domaine"
+                                  id="domaine"
+                                  className="w-full select-1 rounded-md px-6 border border-solid border-body-color"
+                                >
+                                  <option value=""> -- Select domain --</option>
+                                  <option value="carpenter">Carpenter</option>
+                                  <option value="electrician">
+                                    Electrician
+                                  </option>
+                                  <option value="plumber">Plumber</option>
+                                  <option value="painter">Painter</option>
+                                  <option value="bricklayer">Bricklayer</option>
+                                  <option value="metalworker">
+                                    Metalworker
+                                  </option>
+                                  <option value="mechanic">Mechanic</option>
+                                </select>
+                              </div>
                             </div>
-                          </div>                           
-                        </div>
-                        }
+                          </div>
+                        )}
                       </div>
                       <div className="row">
                         <div className="w-full md:w-1/2">
@@ -365,6 +348,8 @@ const EditProfilModal = ({ onClose, onProfilUpdated, user }) => {
                                 <option value="El Alia">EL ALIA</option>
                                 <option value="Ras Jbal">Ras Jbal</option>
                                 <option value="Metline">Metline</option>
+                                <option value="bizerte sud">Bizerte sud</option>
+                            <option value="bizerte sud">Bizerte nord</option>
                               </select>
                             </div>
                           </div>
@@ -408,30 +393,30 @@ const EditProfilModal = ({ onClose, onProfilUpdated, user }) => {
                           </div>
                         </div>
                       </div>
-                      { formData.description && 
-                      <div className="w-full">
-                        <div className="mx-2">
-                          <div className="single_form section_title mt-2">
-                            <label className="title" htmlFor="description">
-                              About me
-                            </label>
-                            <textarea
-                              onChange={handleChange}
-                              value={formData.description}
-                              name="description"
-                              id="description"
-                              placeholder="About me"
-                              className="w-full rounded-md py-4 px-6 border border-solid border-body-color"
-                            ></textarea>
-                            {/* {errors.description && (
+                      {formData.description && (
+                        <div className="w-full">
+                          <div className="mx-2">
+                            <div className="single_form section_title mt-2">
+                              <label className="title" htmlFor="description">
+                                About me
+                              </label>
+                              <textarea
+                                onChange={handleChange}
+                                value={formData.description}
+                                name="description"
+                                id="description"
+                                placeholder="About me"
+                                className="w-full rounded-md py-4 px-6 border border-solid border-body-color"
+                              ></textarea>
+                              {/* {errors.description && (
                             <div className="error">
                               This field may not be blank.
                             </div>
                           )} */}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      } 
+                      )}
                     </div>
                   </div>
                 </div>

@@ -4,17 +4,25 @@ import AddServiceModal from "../Modals/AddServiceModal";
 import { Carousel } from "flowbite-react";
 import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
 import { Link } from "react-router-dom";
+import EditServiceModal from "../Modals/EditServiceModal";
 
-const AllServices = ({user}) => {
+const AllServices = ({ user }) => {
   const [services, setServices] = useState([]);
   const [error, setError] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [itemToEdit, setItemToEdit] = useState(null);
 
   const handleDeleteClick = (item) => {
     setItemToDelete(item);
     setIsDeleteModalOpen(true);
+  };
+
+  const handleEditClick = (item) => {
+    setItemToEdit(item);
+    setIsEditModalOpen(true);
   };
 
   const toggleAddModal = () => {
@@ -26,22 +34,29 @@ const AllServices = ({user}) => {
     setItemToDelete(null);
   };
 
+  const toggleEditModal = () => {
+    setIsEditModalOpen(!isEditModalOpen);
+    setItemToEdit(null);
+  };
+
   const fetchServices = async () => {
     try {
       const token = localStorage.getItem("token");
       //console.log(user.id);
-      const response = axios.get(`http://127.0.0.1:8000/services-by-entrepreneur/${user.id}/` , {
-      headers: {
-        Authorization: `Token ${token}`,
-      }},);
+      const response = axios.get(
+        `http://127.0.0.1:8000/services-by-entrepreneur/${user.id}/`,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
       setServices((await response).data);
     } catch (err) {
       console.log(err.response.data);
       setError(err.response.data);
     }
-
   };
-
 
   useEffect(() => {
     fetchServices();
@@ -124,18 +139,21 @@ const AllServices = ({user}) => {
 
                     <ul className="social absolute top-4 right-17">
                       <li>
-                        <Link to={`/${user.username}/services/${service.id}`} >
-                            <i className="lni lni-eye"></i>
+                        <Link to={`/${user.username}/services/${service.id}`}>
+                          <i className="lni lni-eye"></i>
                         </Link>
-                        
                       </li>
                       <li>
-                        <a href="">
+                        <a onClick={() => handleEditClick(service)}>
                           <i className="lni lni-pencil"></i>
                         </a>
                       </li>
+
                       <li>
-                        <a className="cursor-pointer" onClick={() => handleDeleteClick(service)}>
+                        <a
+                          className="cursor-pointer"
+                          onClick={() => handleDeleteClick(service)}
+                        >
                           <i className="lni lni-trash"></i>
                         </a>
                       </li>
@@ -143,7 +161,7 @@ const AllServices = ({user}) => {
                         <ConfirmDeleteModal
                           onClose={toggleDeleteModal}
                           onDeleted={deleteService}
-                          item={'service'}
+                          item={"service"}
                         />
                       )}
                     </ul>
@@ -165,6 +183,14 @@ const AllServices = ({user}) => {
           ))}
         </div>
       </div>
+      {isEditModalOpen && (
+        <EditServiceModal
+          service={itemToEdit}
+          onClose={toggleEditModal}
+          onServiceUpdated={fetchServices}
+          user_id={user.id}
+        />
+      )}
     </>
   );
 };

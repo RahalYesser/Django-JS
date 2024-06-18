@@ -1,40 +1,40 @@
-import React, { useState } from "react";
-import { Carousel, Alert } from "flowbite-react";
+import React ,{ useState, useEffect } from "react";
 import axios from "axios";
+import { Carousel, Alert } from "flowbite-react";
 
-const AddServiceModal = ({ onClose, onServiceAdded , user_id }) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    date: "",
-    files: [],
-    tarif: "",
-    entrepreneur: user_id,
-  });
 
-  
-
+const EditServiceModal = ({ onClose , service , onServiceUpdated,user_id }) => {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState(false);
+  const initialFormData = {
+    title: service.title,
+    description: service.description,
+    date: service.date,
+    files: [],
+    tarif: service.tarif,
+    entrepreneur: user_id,
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-
     setFormData({
       ...formData,
       files: files,
     });
 
-    const previews = files.map((file) => URL.createObjectURL(file));
-    setImagePreviews(previews);
+    const previews = files.map((file) => URL.createObjectURL(file)); 
+    setImagePreviews(previews); 
   };
 
   const handleClearImages = () => {
@@ -45,59 +45,46 @@ const AddServiceModal = ({ onClose, onServiceAdded , user_id }) => {
     setImagePreviews([]);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const data = new FormData();
+
+    const updatedFormData = new FormData();
     for (let key in formData) {
       if (key === "files") {
         for (let i = 0; i < formData.files.length; i++) {
-          data.append("files", formData.files[i]);
+            updatedFormData.append("files", formData.files[i]);
         }
       } else {
-        data.append(key, formData[key]);
+        updatedFormData.append(key, formData[key]);
       }
     }
 
-    console.log("Form data to be submitted:", formData);
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/services/",
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("Service created successfully:", response.data);
-      setAlert(true);
-      setFormData({
-        date: "",
-        description: "",
-        tarif: "",
-        title: "",
-        files: [],
-        entrepreneur: user_id,
-      });
-      setErrors({});
-      setTimeout(() => {
-        setAlert(false);
-        onServiceAdded();
+    axios.put(`http://127.0.0.1:8000/services/${service.id}/`, updatedFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log("Data updated successfully", response.data);
+        onServiceUpdated();
         onClose();
-      }, 1000); // Hide alert after 1 second
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        setErrors(error.response.data);
-        console.error("400 error occurred:", error);
-      } else {
-        console.error("An unexpected error occurred:", error);
-      }
-    }
+      })
+      .catch((error) => {
+        console.error("There was an error updating the data!", error);
+      });
   };
 
   const handleFileClick = () => {
     document.getElementById("files").click();
   };
+
+  useEffect(() => {
+    if (service.files) {
+        const previews = service.files.map((file) => file.file);
+        setImagePreviews(previews);
+    }
+    //console.log()
+  }, [service]);
 
   return (
     <>
@@ -109,7 +96,7 @@ const AddServiceModal = ({ onClose, onServiceAdded , user_id }) => {
               {/*header*/}
               <div className="flex items-start justify-between p-4 border-b border-solid border-blueGray-200 rounded-t">
                 <div className="section_title text-center">
-                  <h5 className="sub_title">SERVICE</h5>
+                  <h5 className="sub_title">EDIT SERVICE</h5>
                 </div>
                 <button
                   className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -209,15 +196,15 @@ const AddServiceModal = ({ onClose, onServiceAdded , user_id }) => {
                     </div>
                   </div>
                 </div>
-                
+
                 {imagePreviews.length > 0 ? (
                   <div id="add-photos" className="container w-full">
                     <div className="images-1 m-2 sm:h-64 xl:h-80 2xl:h-96 w-full">
                       <Carousel pauseOnHover>
-                        {imagePreviews.map((src, index) => (
+                        {imagePreviews.map((preview,index) => (
                           <img
                             key={index}
-                            src={src}
+                            src={preview}
                             width="200"
                             alt={`Preview ${index}`}
                           />
@@ -233,7 +220,6 @@ const AddServiceModal = ({ onClose, onServiceAdded , user_id }) => {
                     </button>
                   </div>
                 ) : (
-                 
                   <div id="add-photos" className="container w-full md:w-1/2">
                     <div
                       onClick={handleFileClick}
@@ -259,7 +245,6 @@ const AddServiceModal = ({ onClose, onServiceAdded , user_id }) => {
                         <h3 className="services_title text-black font-semibold text-xl md:text-3xl">
                           Images
                         </h3>
-                        {/* <p className="mt-4">I'm a client, hiring for a pro for job</p> */}
                       </div>
                       <input
                         name="files"
@@ -284,10 +269,15 @@ const AddServiceModal = ({ onClose, onServiceAdded , user_id }) => {
                 >
                   Close
                 </button>
-                <button onClick={handleSubmit} className="form-btn">
-                  Add Service
+                <button
+                  onClick={handleSubmit}
+                  className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                >
+                  Save Changes
                 </button>
-
+                {/* <button onClick={handleSubmit} className="form-btn">
+                  Add Service
+                </button> */}
               </div>
             </div>
           </div>
@@ -303,4 +293,4 @@ const AddServiceModal = ({ onClose, onServiceAdded , user_id }) => {
   );
 };
 
-export default AddServiceModal;
+export default EditServiceModal;

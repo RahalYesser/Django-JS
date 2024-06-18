@@ -13,7 +13,6 @@ import DemandesByClient from "../components/Services/DemandesByClient";
 const Profil = () => {
   const [ user, setUser] = useState(false);
   const { username } = useParams();
-  //const  [username, setUsername] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const imageUrl = user.photo ? user.photo : userIMG;
@@ -96,6 +95,8 @@ const Profil = () => {
                     <li className="mb-2"><span className="p-1 bg-gray-200">+216</span> {user.tel}</li>
                   </ul>
                 </div>
+                <hr className="my-3 border-t border-gray-300" />
+
                 <div className="flex flex-col">
                   <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">
                     Adresse
@@ -105,6 +106,26 @@ const Profil = () => {
                     <li className="mb-2"> City : {user.city}</li>
                     <li className="mb-2"> Street : {user.street}</li>
                     <li className="mb-2"> Postal code : {user.postalcode}</li>
+                  </ul>
+                </div>
+                <hr className="my-3 border-t border-gray-300" />
+
+                <div className="flex flex-col">
+                  <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">
+                    Email
+                  </span>
+                  <ul>
+                    <li className="mb-2"> Email : {user.email}</li>
+                  </ul>
+                </div>
+                <hr className="my-3 border-t border-gray-300" />
+
+                <div className="flex flex-col">
+                  <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">
+                    Gender
+                  </span>
+                  <ul>
+                    <li className="mb-2"> {user.gender}</li>
                   </ul>
                 </div>
               </div>

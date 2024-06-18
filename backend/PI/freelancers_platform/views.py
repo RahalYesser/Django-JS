@@ -21,7 +21,18 @@ from django.contrib.auth.hashers import make_password
 
 class AutoEntrepreneurViewSet(viewsets.ModelViewSet):
     queryset = AutoEntrepreneur.objects.all()
-    serializer_class = AutoEntrepreneurSerializer
+    serializer_class = AutoEntrepreneurReadSerializer
+    
+    """  @action(detail=False, methods=['get'])
+    def by_id(self, request, entrepreneur_id):
+        autoentrepreneur = AutoEntrepreneur.objects.filter(id=entrepreneur_id)
+        serializer = self.get_serializer(autoentrepreneur, many=False)
+        return Response(serializer.data) """
+    
+class AutoEntrepreneurWriteViewSet(viewsets.ModelViewSet):
+    queryset = AutoEntrepreneur.objects.all()
+    serializer_class = AutoEntrepreneurWriteSerializer
+
 
 class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
