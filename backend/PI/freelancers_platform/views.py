@@ -187,21 +187,25 @@ def logout(request):
 @csrf_exempt
 def send_email_view(request):
     if request.method == 'POST':
-        data = json.loads(request.body)     
-        subject = data.get('subject', 'No Subject')
+        data = json.loads(request.body)
+        
+        email = data.get('email')
+        subject = data.get('name', 'No Subject') 
         message = data.get('message', '')
         from_email = settings.EMAIL_HOST_USER
-        recipient_list = data.get('recipient_list', [])
         
-        if not recipient_list:
-            return JsonResponse({'error': 'Recipient list is empty'}, status=400)
+        email_body = f"Submitted Email: {email}\n\nMessage:\n{message}"
+        recipient_list = [from_email,email]  
+        
+        if not message or not from_email:
+            return JsonResponse({'error': 'Message and email are required'}, status=400)
 
         try:
-            send_mail(subject, message, from_email, recipient_list)
+            send_mail(subject, email_body, from_email, recipient_list)
             return JsonResponse({'success': 'Email sent successfully'})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-    return JsonResponse({'error': 'Invalid request method'}, status=405) 
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
 @api_view(['GET'])
